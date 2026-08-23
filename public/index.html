@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="MediMate - Professional Medication Management & AI Health Assistant">
+  <title>MediMate - Health & Medication Management</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="dark-theme">
+
+  <!-- AUTHENTICATION CONTAINER (Login / Signup / Forgot Password) -->
+  <div id="authContainer" class="auth-container hidden">
+    <div class="auth-card-wrapper">
+      
+      <!-- BRAND LOGO HEADER -->
+      <div class="auth-brand-header text-center">
+        <div class="logo-icon auth-logo-icon">
+          <i data-lucide="pill"></i>
+        </div>
+        <h1 class="auth-brand-title">Medi<span class="accent-text">Mate</span></h1>
+        <p class="text-secondary auth-subtitle">Medication Management & AI Health Assistant</p>
+      </div>
+
+      <!-- LOGIN SCREEN -->
+      <div id="loginScreen" class="auth-screen">
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="text-secondary auth-desc">Sign in to access your medication schedule and assistant.</p>
+        
+        <div id="loginAlert" class="auth-alert hidden"></div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label for="loginEmail">Email Address</label>
+            <div class="input-with-icon">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="loginEmail" placeholder="e.g. john.doe@medimate.health" value="john.doe@medimate.health" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <div class="input-with-icon">
+              <i data-lucide="lock" class="input-icon"></i>
+              <input type="password" id="loginPassword" placeholder="••••••••" value="Password123!" required>
+              <button type="button" class="pwd-toggle-btn" onclick="togglePasswordVisibility('loginPassword', 'loginPwdIcon')" aria-label="Toggle password view">
+                <i data-lucide="eye" id="loginPwdIcon"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="auth-options-row">
+            <label class="checkbox-container">
+              <input type="checkbox" id="loginRemember" checked>
+              <span class="checkmark"></span>
+              <span>Remember me</span>
+            </label>
+            <a href="#" class="auth-link" onclick="showAuthView('forgotPasswordScreen'); return false;">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="primary-btn auth-submit-btn" id="loginBtn">
+            <span>Sign In</span>
+          </button>
+        </form>
+
+        <div class="auth-footer-link text-center margin-top-md">
+          <span class="text-secondary">Don't have an account?</span>
+          <a href="#" class="auth-link-bold" onclick="showAuthView('signupScreen'); return false;">Create Account</a>
+        </div>
+      </div>
+
+      <!-- SIGN UP SCREEN -->
+      <div id="signupScreen" class="auth-screen hidden">
+        <h2 class="auth-title">Create Account</h2>
+        <p class="text-secondary auth-desc">Start tracking your medication schedule with MediMate.</p>
+
+        <div id="signupAlert" class="auth-alert hidden"></div>
+
+        <form id="signupForm" onsubmit="handleSignup(event)">
+          <div class="form-group">
+            <label for="signupName">Full Name *</label>
+            <div class="input-with-icon">
+              <i data-lucide="user" class="input-icon"></i>
+              <input type="text" id="signupName" placeholder="e.g. John Doe" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupEmail">Email Address *</label>
+            <div class="input-with-icon">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="signupEmail" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="signupPassword">Password *</label>
+              <div class="input-with-icon">
+                <i data-lucide="lock" class="input-icon"></i>
+                <input type="password" id="signupPassword" placeholder="••••••••" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="signupConfirmPassword">Confirm Password *</label>
+              <div class="input-with-icon">
+                <i data-lucide="lock" class="input-icon"></i>
+                <input type="password" id="signupConfirmPassword" placeholder="••••••••" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="signupPhone">Phone Number (Optional)</label>
+            <div class="input-with-icon">
+              <i data-lucide="phone" class="input-icon"></i>
+              <input type="tel" id="signupPhone" placeholder="+1 (555) 000-0000">
+            </div>
+          </div>
+
+          <div class="auth-options-row">
+            <label class="checkbox-container">
+              <input type="checkbox" id="signupTerms" required checked>
+              <span class="checkmark"></span>
+              <span>I agree to the Terms & Privacy Policy</span>
+            </label>
+          </div>
+
+          <button type="submit" class="primary-btn auth-submit-btn" id="signupBtn">
+            <span>Create Account</span>
+          </button>
+        </form>
+
+        <div class="auth-footer-link text-center margin-top-md">
+          <span class="text-secondary">Already have an account?</span>
+          <a href="#" class="auth-link-bold" onclick="showAuthView('loginScreen'); return false;">Sign In</a>
+        </div>
+      </div>
+
+      <!-- FORGOT PASSWORD SCREEN -->
+      <div id="forgotPasswordScreen" class="auth-screen hidden">
+        <h2 class="auth-title">Reset Password</h2>
+        <p class="text-secondary auth-desc">Enter your email to receive password reset instructions.</p>
+
+        <div id="forgotAlert" class="auth-alert hidden"></div>
+
+        <form id="forgotForm" onsubmit="handleForgotPassword(event)">
+          <div class="form-group">
+            <label for="forgotEmail">Email Address</label>
+            <div class="input-with-icon">
+              <i data-lucide="mail" class="input-icon"></i>
+              <input type="email" id="forgotEmail" placeholder="name@example.com" required>
+            </div>
+          </div>
+
+          <button type="submit" class="primary-btn auth-submit-btn" id="forgotBtn">
+            <span>Send Reset Link</span>
+          </button>
+        </form>
+
+        <div class="auth-footer-link text-center margin-top-md">
+          <a href="#" class="auth-link-bold" onclick="showAuthView('loginScreen'); return false;">
+            <i data-lucide="arrow-left" style="width: 14px; height: 14px; inline-size: 14px;"></i> Back to Sign In
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MAIN APPLICATION LAYOUT -->
+  <div class="app-layout">
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="logo-icon">
+            <i data-lucide="pill"></i>
+          </div>
+          <span class="brand-title">Medi<span class="accent-text">Mate</span></span>
+        </div>
+        <button class="mobile-close-btn" id="mobileCloseBtn" onclick="toggleMobileSidebar()" aria-label="Close menu">
+          <i data-lucide="x"></i>
+        </button>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="medications" onclick="switchTab('medications')">
+          <i data-lucide="pill"></i>
+          <span>Medications</span>
+        </button>
+        <button class="nav-item" data-tab="schedule" onclick="switchTab('schedule')">
+          <i data-lucide="calendar"></i>
+          <span>Schedule</span>
+        </button>
+        <button class="nav-item" data-tab="history" onclick="switchTab('history')">
+          <i data-lucide="history"></i>
+          <span>History</span>
+        </button>
+        <button class="nav-item" data-tab="analytics" onclick="switchTab('analytics')">
+          <i data-lucide="bar-chart-3"></i>
+          <span>Analytics</span>
+        </button>
+        <button class="nav-item" data-tab="ai-assistant" onclick="switchTab('ai-assistant')">
+          <i data-lucide="bot"></i>
+          <span>AI Assistant</span>
+          <span class="badge badge-pulse">AI</span>
+        </button>
+        <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
+          <i data-lucide="user"></i>
+          <span>Profile</span>
+        </button>
+        <button class="nav-item" data-tab="settings" onclick="switchTab('settings')">
+          <i data-lucide="settings"></i>
+          <span>Settings</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-profile-card" onclick="switchTab('profile')" style="cursor: pointer;">
+          <div class="avatar">
+            <span>JD</span>
+          </div>
+          <div class="user-info">
+            <span class="user-name">John Doe</span>
+            <span class="user-role">Patient ID #8492</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-wrapper">
+      <!-- Header -->
+      <header class="top-header">
+        <div class="header-left">
+          <button class="mobile-toggle-btn" onclick="toggleMobileSidebar()" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+          </button>
+          <div class="greeting-container">
+            <h1 id="dynamicGreeting">Good Morning, John</h1>
+            <p id="currentDate" class="header-date">Wednesday, Aug 19, 2026</p>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-btn notification-btn" id="notificationBtn" title="Notifications" onclick="switchTab('dashboard')">
+            <i data-lucide="bell"></i>
+            <span class="notification-dot" id="notificationDot"></span>
+          </button>
+          <button class="icon-btn settings-header-btn" title="Settings" onclick="switchTab('settings')">
+            <i data-lucide="sliders"></i>
+          </button>
+
+          <!-- HEADER PROFILE DROPDOWN CONTAINER -->
+          <div class="profile-dropdown-container" id="profileDropdownContainer">
+            <button class="header-profile-btn" onclick="toggleProfileDropdown()">
+              <div class="avatar header-avatar">
+                <span id="headerUserAvatarInitials">JD</span>
+              </div>
+              <i data-lucide="chevron-down" class="dropdown-chevron"></i>
+            </button>
+
+            <!-- DROPDOWN MENU -->
+            <div id="profileDropdownMenu" class="profile-dropdown-menu">
+              <div class="dropdown-header">
+                <span class="user-name" id="dropdownUserName">John Doe</span>
+                <span class="user-role" id="dropdownUserEmail">john.doe@medimate.health</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item" onclick="switchTab('profile'); closeProfileDropdown();">
+                <i data-lucide="user"></i> View Profile
+              </button>
+              <button class="dropdown-item" onclick="openEditProfileModal();">
+                <i data-lucide="user-cog"></i> Edit Profile
+              </button>
+              <button class="dropdown-item" onclick="switchTab('settings'); closeProfileDropdown();">
+                <i data-lucide="settings"></i> Settings
+              </button>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item danger-item" onclick="handleLogout()">
+                <i data-lucide="log-out"></i> Logout
+              </button>
+            </div>
+          </div>
+
+          <button class="primary-btn add-med-header-btn" onclick="openModal('addModal')">
+            <i data-lucide="plus"></i>
+            <span>Add Medication</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views -->
+      <div class="content-container">
+        
+        <!-- DASHBOARD TAB -->
+        <section id="dashboard-tab" class="tab-content active">
+          <!-- Summary Cards Grid -->
+          <div class="summary-cards-grid">
+            <div class="card summary-card glow-teal">
+              <div class="card-icon icon-teal">
+                <i data-lucide="calendar-check"></i>
+              </div>
+              <div class="card-details">
+                <span class="card-label">Today's Doses</span>
+                <h3 id="statTodayDoses" class="card-value">0</h3>
+              </div>
+            </div>
+
+            <div class="card summary-card glow-green">
+              <div class="card-icon icon-green">
+                <i data-lucide="check-circle-2"></i>
+              </div>
+              <div class="card-details">
+                <span class="card-label">Taken</span>
+                <h3 id="statTakenDoses" class="card-value">0</h3>
+              </div>
+            </div>
+
+            <div class="card summary-card glow-amber">
+              <div class="card-icon icon-amber">
+                <i data-lucide="clock"></i>
+              </div>
+              <div class="card-details">
+                <span class="card-label">Pending</span>
+                <h3 id="statPendingDoses" class="card-value">0</h3>
+              </div>
+            </div>
+
+            <div class="card summary-card glow-indigo">
+              <div class="card-icon icon-indigo">
+                <i data-lucide="activity"></i>
+              </div>
+              <div class="card-details">
+                <span class="card-label">Adherence Rate</span>
+                <h3 id="statAdherenceRate" class="card-value">0%</h3>
+              </div>
+            </div>
+
+            <div class="card summary-card glow-rose">
+              <div class="card-icon icon-rose">
+                <i data-lucide="alert-triangle"></i>
+              </div>
+              <div class="card-details">
+                <span class="card-label">Low Stock</span>
+                <h3 id="statLowStock" class="card-value">0</h3>
+              </div>
+            </div>
+          </div>
+
+          <!-- Filter & Search Toolbar -->
+          <div class="toolbar-section">
+            <div class="search-box">
+              <i data-lucide="search" class="search-icon"></i>
+              <input type="text" id="dashboardSearch" placeholder="Search by name, dosage, or category..." oninput="handleSearchFilter()">
+            </div>
+            <div class="filter-pills">
+              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
+              <button class="filter-pill" data-filter="pending" onclick="setFilter('pending')">Pending</button>
+              <button class="filter-pill" data-filter="taken" onclick="setFilter('taken')">Taken</button>
+              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')">Low Stock</button>
+            </div>
+          </div>
+
+          <!-- Today's Medication Schedule Section -->
+          <div class="section-card">
+            <div class="section-header">
+              <h2>Today's Medication Schedule</h2>
+              <span class="badge badge-info" id="scheduleCountBadge">0 Scheduled</span>
+            </div>
+
+            <div id="scheduleContainer" class="medication-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- MEDICATIONS TAB -->
+        <section id="medications-tab" class="tab-content">
+          <div class="tab-header-flex">
+            <div>
+              <h2>Medication Cabinet</h2>
+              <p class="text-secondary">Manage your active medications, dosages, and stock levels.</p>
+            </div>
+            <button class="primary-btn" onclick="openModal('addModal')">
+              <i data-lucide="plus"></i>
+              <span>Add New Medicine</span>
+            </button>
+          </div>
+
+          <div class="toolbar-section margin-top-md">
+            <div class="search-box">
+              <i data-lucide="search" class="search-icon"></i>
+              <input type="text" id="medsSearch" placeholder="Search medications..." oninput="handleSearchFilter()">
+            </div>
+            <div class="filter-pills">
+              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
+              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')">Low Stock (<10)</button>
+            </div>
+          </div>
+
+          <div id="medicationsGrid" class="medications-grid margin-top-md">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- SCHEDULE TAB -->
+        <section id="schedule-tab" class="tab-content">
+          <div class="tab-header">
+            <h2>Detailed Schedule</h2>
+            <p class="text-secondary">Comprehensive timeline of your medications grouped by time of day.</p>
+          </div>
+
+          <div id="timelineContainer" class="timeline-container margin-top-md">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- HISTORY TAB -->
+        <section id="history-tab" class="tab-content">
+          <div class="tab-header-flex">
+            <div>
+              <h2>Medication History Log</h2>
+              <p class="text-secondary">Historical record of taken, pending, and missed dose timestamps.</p>
+            </div>
+            <button class="secondary-btn" onclick="clearHistoryLog()">
+              <i data-lucide="trash-2"></i>
+              <span>Clear History</span>
+            </button>
+          </div>
+
+          <div class="section-card margin-top-md">
+            <div id="historyTableContainer" class="history-list">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+        </section>
+
+        <!-- ANALYTICS TAB -->
+        <section id="analytics-tab" class="tab-content">
+          <div class="tab-header">
+            <h2>Adherence & Health Analytics</h2>
+            <p class="text-secondary">Track your medication compliance and weekly compliance trends.</p>
+          </div>
+
+          <!-- Analytics Overview Cards -->
+          <div class="analytics-metrics-grid margin-top-md">
+            <div class="card metric-card">
+              <span class="text-secondary">Daily Adherence</span>
+              <h3 id="analyticsDaily">0%</h3>
+              <div class="progress-bar-bg"><div id="barDaily" class="progress-bar-fill teal-bg" style="width: 0%;"></div></div>
+            </div>
+            <div class="card metric-card">
+              <span class="text-secondary">Weekly Adherence</span>
+              <h3 id="analyticsWeekly">0%</h3>
+              <div class="progress-bar-bg"><div id="barWeekly" class="progress-bar-fill indigo-bg" style="width: 0%;"></div></div>
+            </div>
+            <div class="card metric-card">
+              <span class="text-secondary">Monthly Adherence</span>
+              <h3 id="analyticsMonthly">0%</h3>
+              <div class="progress-bar-bg"><div id="barMonthly" class="progress-bar-fill green-bg" style="width: 0%;"></div></div>
+            </div>
+          </div>
+
+          <!-- Chart Card -->
+          <div class="section-card margin-top-md">
+            <div class="section-header">
+              <h3>Weekly Adherence Compliance</h3>
+              <span class="text-secondary">Monday – Sunday Compliance Rate (%)</span>
+            </div>
+            <div class="chart-box">
+              <canvas id="weeklyChartCanvas" height="240"></canvas>
+            </div>
+          </div>
+
+          <!-- Statistics Breakdown Grid -->
+          <div class="analytics-stats-grid margin-top-md">
+            <div class="section-card">
+              <h3>Medication Insights</h3>
+              <ul class="stats-list margin-top-sm">
+                <li>
+                  <span class="stat-title">Most Taken Medicine</span>
+                  <span id="statMostTaken" class="stat-highlight text-teal">-</span>
+                </li>
+                <li>
+                  <span class="stat-title">Missed / Pending Doses</span>
+                  <span id="statMissedDoses" class="stat-highlight text-rose">0</span>
+                </li>
+                <li>
+                  <span class="stat-title">Adherence Trend</span>
+                  <span id="statTrend" class="stat-highlight text-indigo">Stable</span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="section-card">
+              <h3>Low Stock Warning Inventory</h3>
+              <div id="analyticsLowStockList" class="low-stock-list margin-top-sm">
+                <!-- Rendered dynamically -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- AI ASSISTANT TAB -->
+        <section id="ai-assistant-tab" class="tab-content">
+          <div class="ai-container">
+            <div class="ai-header-banner">
+              <div class="ai-banner-info">
+                <div class="ai-avatar">
+                  <i data-lucide="bot"></i>
+                </div>
+                <div>
+                  <h2>MediMate Health Assistant</h2>
+                  <p class="text-secondary">Ask questions about your medicines, stock, or schedule.</p>
+                </div>
+              </div>
+              <button class="secondary-btn" onclick="clearChatHistory()">
+                <i data-lucide="trash-2"></i>
+                <span>Clear Chat</span>
+              </button>
+            </div>
+
+            <div class="ai-safety-alert">
+              <i data-lucide="shield-alert" class="alert-icon"></i>
+              <span><strong>Health Safety Disclaimer:</strong> This AI assistant provides general information only. It is not a doctor. Consult your healthcare professional before modifying medication dosage.</span>
+            </div>
+
+            <!-- Quick Suggestion Chips -->
+            <div class="preset-prompts">
+              <button class="prompt-chip" onclick="sendPresetPrompt('What medicines do I have today?')">
+                <i data-lucide="sparkles"></i> What medicines do I have today?
+              </button>
+              <button class="prompt-chip" onclick="sendPresetPrompt('Which medicines are pending?')">
+                <i data-lucide="clock"></i> Which medicines are pending?
+              </button>
+              <button class="prompt-chip" onclick="sendPresetPrompt('Which medicine has low stock?')">
+                <i data-lucide="alert-triangle"></i> Low stock check?
+              </button>
+              <button class="prompt-chip" onclick="sendPresetPrompt('What is scheduled tonight?')">
+                <i data-lucide="moon"></i> Scheduled tonight?
+              </button>
+            </div>
+
+            <!-- Chat History Area -->
+            <div id="chatHistory" class="chat-history">
+              <!-- Chat messages appended dynamically -->
+            </div>
+
+            <!-- Typing Loading Indicator -->
+            <div id="aiTypingIndicator" class="ai-typing-indicator hidden">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <span>MediMate AI is thinking...</span>
+            </div>
+
+            <!-- Chat Input Controls -->
+            <div class="chat-input-wrapper">
+              <input type="text" id="chatInput" placeholder="Ask MediMate anything about your medications..." onkeydown="handleChatKey(event)">
+              <button class="icon-btn speaker-btn" id="voiceToggleChatBtn" title="Speak Last Response" onclick="speakLastResponse()">
+                <i data-lucide="volume-2"></i>
+              </button>
+              <button class="primary-btn send-btn" id="sendChatBtn" onclick="sendChatMessage()">
+                <span>Send</span>
+                <i data-lucide="send"></i>
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- USER PROFILE TAB -->
+        <section id="profile-tab" class="tab-content">
+          <div class="tab-header-flex">
+            <div>
+              <h2>Patient Profile</h2>
+              <p class="text-secondary">Your account, profile information, and credentials.</p>
+            </div>
+            <button class="primary-btn" onclick="openEditProfileModal()">
+              <i data-lucide="user-cog"></i>
+              <span>Edit Profile</span>
+            </button>
+          </div>
+
+          <div class="profile-page-grid margin-top-md">
+            <div class="section-card profile-card-main text-center">
+              <div class="avatar profile-avatar-large">
+                <span id="profileAvatarInitials">JD</span>
+              </div>
+              <h2 id="profileFullName" class="margin-top-xs">John Doe</h2>
+              <p id="profileEmail" class="text-secondary">john.doe@medimate.health</p>
+              <span class="badge badge-info margin-top-xs">Verified Patient</span>
+            </div>
+
+            <div class="section-card">
+              <h3>Account Details</h3>
+              <div class="profile-details-list margin-top-sm">
+                <div class="detail-row">
+                  <span class="detail-label">Full Name:</span>
+                  <strong id="profileFullNameDetail">John Doe</strong>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Email Address:</span>
+                  <strong id="profileEmailDetail">john.doe@medimate.health</strong>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Phone Number:</span>
+                  <strong id="profilePhone">+1 (555) 234-5678</strong>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Member Since:</span>
+                  <strong id="profileCreated">August 19, 2026</strong>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Account Status:</span>
+                  <span class="text-teal" style="font-weight: 600;">Active & Protected</span>
+                </div>
+              </div>
+
+              <div class="margin-top-md">
+                <button class="danger-btn" onclick="handleLogout()">
+                  <i data-lucide="log-out"></i>
+                  <span>Sign Out of MediMate</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SETTINGS TAB -->
+        <section id="settings-tab" class="tab-content">
+          <div class="tab-header">
+            <h2>Application Settings</h2>
+            <p class="text-secondary">Customize notifications, voice reminders, sound preferences, and data.</p>
+          </div>
+
+          <div class="settings-grid margin-top-md">
+            <!-- Reminder & Alarm Settings -->
+            <div class="section-card">
+              <div class="card-header-with-icon">
+                <i data-lucide="bell"></i>
+                <h3>Reminder & Alarm Preferences</h3>
+              </div>
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Enable Medication Reminders</span>
+                  <p class="setting-desc">Receive automatic pop-up reminders at scheduled dose times.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingEnableReminders" checked onchange="saveSettings()">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Voice Reminders</span>
+                  <p class="setting-desc">Read medication reminders aloud using speech synthesis.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingVoiceReminders" checked onchange="saveSettings()">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Alarm Sound</span>
+                  <p class="setting-desc">Play pleasant audio chime during alerts.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingAlarmSound" checked onchange="saveSettings()">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Snooze Duration</span>
+                  <p class="setting-desc">Delay time when "Remind Me Later" is clicked.</p>
+                </div>
+                <select id="settingSnoozeMinutes" class="custom-select" onchange="saveSettings()">
+                  <option value="5">5 Minutes</option>
+                  <option value="10" selected>10 Minutes</option>
+                  <option value="15">15 Minutes</option>
+                </select>
+              </div>
+
+              <div class="setting-action-row margin-top-sm">
+                <button class="secondary-btn" onclick="triggerTestAlarm()">
+                  <i data-lucide="volume-2"></i>
+                  <span>Test Reminder Sound & Voice</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Appearance & System -->
+            <div class="section-card">
+              <div class="card-header-with-icon">
+                <i data-lucide="palette"></i>
+                <h3>Appearance & Theme</h3>
+              </div>
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Dark Glassmorphism Theme</span>
+                  <p class="setting-desc">Modern dark visual layout with teal/indigo accents.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingDarkMode" checked disabled>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title">Low Stock Alert Notifications</span>
+                  <p class="setting-desc">Show warning toasts when stock falls below 10 doses.</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="settingLowStockAlerts" checked onchange="saveSettings()">
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="card-header-with-icon margin-top-md">
+                <i data-lucide="database"></i>
+                <h3>Data Management</h3>
+              </div>
+              <div class="setting-action-row">
+                <button class="secondary-btn" onclick="exportAppData()">
+                  <i data-lucide="download"></i>
+                  <span>Export Data (JSON)</span>
+                </button>
+                <button class="danger-btn" onclick="resetToDemoData()">
+                  <i data-lucide="rotate-ccw"></i>
+                  <span>Reset to Demo Data</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD MEDICATION MODAL -->
+  <div id="addModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Add New Medication</h3>
+        <button class="close-icon-btn" onclick="closeModal('addModal')"><i data-lucide="x"></i></button>
+      </div>
+      <form id="addMedForm" onsubmit="saveNewMedication(event)">
+        <div class="form-group">
+          <label for="addMedName">Medication Name *</label>
+          <input type="text" id="addMedName" placeholder="e.g. Lisinopril, Metformin XR" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="addMedDosage">Dosage *</label>
+            <input type="text" id="addMedDosage" placeholder="e.g. 10 mg (1 tablet), 500 mg" required>
+          </div>
+          <div class="form-group">
+            <label for="addMedTime">Scheduled Time *</label>
+            <input type="time" id="addMedTime" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="addMedStock">Stock Quantity *</label>
+            <input type="number" id="addMedStock" min="0" value="30" required>
+          </div>
+          <div class="form-group">
+            <label for="addMedCategory">Category / Type</label>
+            <select id="addMedCategory" class="custom-select">
+              <option value="pill">Pill / Tablet</option>
+              <option value="capsule">Capsule</option>
+              <option value="injection">Injection</option>
+              <option value="liquid">Liquid / Syrup</option>
+              <option value="topical">Topical / Drops</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="addMedNotes">Optional Notes</label>
+          <textarea id="addMedNotes" rows="2" placeholder="e.g. Take with food in the morning..."></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" onclick="closeModal('addModal')">Cancel</button>
+          <button type="submit" class="primary-btn">Add Medication</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT MEDICATION MODAL -->
+  <div id="editModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Medication</h3>
+        <button class="close-icon-btn" onclick="closeModal('editModal')"><i data-lucide="x"></i></button>
+      </div>
+      <form id="editMedForm" onsubmit="saveEditedMedication(event)">
+        <input type="hidden" id="editMedId">
+        <div class="form-group">
+          <label for="editMedName">Medication Name *</label>
+          <input type="text" id="editMedName" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editMedDosage">Dosage *</label>
+            <input type="text" id="editMedDosage" required>
+          </div>
+          <div class="form-group">
+            <label for="editMedTime">Scheduled Time *</label>
+            <input type="time" id="editMedTime" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="editMedStock">Stock Quantity *</label>
+            <input type="number" id="editMedStock" min="0" required>
+          </div>
+          <div class="form-group">
+            <label for="editMedCategory">Category / Type</label>
+            <select id="editMedCategory" class="custom-select">
+              <option value="pill">Pill / Tablet</option>
+              <option value="capsule">Capsule</option>
+              <option value="injection">Injection</option>
+              <option value="liquid">Liquid / Syrup</option>
+              <option value="topical">Topical / Drops</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="editMedNotes">Optional Notes</label>
+          <textarea id="editMedNotes" rows="2"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" onclick="closeModal('editModal')">Cancel</button>
+          <button type="submit" class="primary-btn">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- EDIT PROFILE MODAL -->
+  <div id="editProfileModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>Edit Profile Details</h3>
+        <button class="close-icon-btn" onclick="closeModal('editProfileModal')"><i data-lucide="x"></i></button>
+      </div>
+      <form id="editProfileForm" onsubmit="saveProfileEdits(event)">
+        <!-- AVATAR PHOTO CONTROLS -->
+        <div class="form-group avatar-edit-section">
+          <label>Profile Avatar</label>
+          <div class="avatar-edit-preview-row">
+            <div class="avatar edit-avatar-preview" id="editProfileAvatarPreview">
+              <span>JD</span>
+            </div>
+            <div class="avatar-edit-actions">
+              <label for="avatarFileInput" class="secondary-btn avatar-upload-btn">
+                <i data-lucide="upload"></i> Upload Photo
+              </label>
+              <input type="file" id="avatarFileInput" accept="image/*" style="display: none;" onchange="handleAvatarUpload(event)">
+              <button type="button" class="text-link-btn danger-link" onclick="removeAvatar()">Remove Photo</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="editProfileName">Full Name *</label>
+          <input type="text" id="editProfileName" required>
+        </div>
+        <div class="form-group">
+          <label for="editProfileEmail">Email Address *</label>
+          <input type="email" id="editProfileEmail" required>
+        </div>
+        <div class="form-group">
+          <label for="editProfilePhone">Phone Number</label>
+          <input type="tel" id="editProfilePhone">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" onclick="closeModal('editProfileModal')">Cancel</button>
+          <button type="submit" class="primary-btn" id="saveProfileBtn">Save Profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ALARM REMINDER MODAL -->
+  <div id="alarmModal" class="modal-overlay alarm-modal-overlay">
+    <div class="modal-card alarm-modal-card">
+      <div class="alarm-header-pulse">
+        <i data-lucide="bell" class="alarm-bell-icon"></i>
+      </div>
+      <div class="alarm-content text-center">
+        <span class="badge badge-warning">Medication Reminder</span>
+        <h2 id="alarmMedName" class="margin-top-xs">Metformin XR</h2>
+        <p id="alarmMedDosage" class="alarm-dosage">500 mg (1 tablet)</p>
+        <p id="alarmMedTime" class="alarm-time"><i data-lucide="clock"></i> Scheduled for 20:00</p>
+      </div>
+      <div class="modal-footer alarm-footer">
+        <button class="primary-btn glow-green-btn" id="alarmTakeBtn" onclick="handleAlarmTaken()">
+          <i data-lucide="check"></i> Mark Taken
+        </button>
+        <button class="secondary-btn" onclick="handleAlarmSnooze()">
+          <i data-lucide="clock-3"></i> Remind Me Later
+        </button>
+        <button class="text-link-btn" onclick="dismissAlarm()">Dismiss</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DELETE CONFIRMATION MODAL -->
+  <div id="deleteModal" class="modal-overlay">
+    <div class="modal-card confirm-modal-card">
+      <div class="confirm-icon danger-icon">
+        <i data-lucide="trash-2"></i>
+      </div>
+      <h3>Remove Medication?</h3>
+      <p class="text-secondary margin-top-xs">Are you sure you want to remove this medication? This action cannot be undone.</p>
+      <input type="hidden" id="deleteTargetId">
+      <div class="modal-footer margin-top-md">
+        <button class="secondary-btn" onclick="closeModal('deleteModal')">Cancel</button>
+        <button class="danger-btn" onclick="confirmDeleteMedication()">Remove</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/audio.js"></script>
+  <script src="js/reminders.js"></script>
+  <script src="js/analytics.js"></script>
+  <script src="js/ai-assistant.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
