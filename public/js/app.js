@@ -10,62 +10,351 @@ window.appSettings = {
   voiceReminders: true,
   alarmSound: true,
   snoozeMinutes: 10,
-  lowStockAlerts: true
+  lowStockAlerts: true,
+  language: 'en', // 'en' | 'ta' | 'hi'
+  timeFormat: '12h', // '12h' | '24h'
+  customRingtoneUrl: null,
+  customRingtoneName: null,
+  defaultAlarmStyle: 'standard' // 'gentle' | 'standard' | 'urgent' | 'silent_vibe'
 };
 window.currentFilter = 'all';
 window.searchQuery = '';
 
-// Exact Seed Medications as per prompt specifications
+// 20 Sample Active Medications in Cabinet
 const DEFAULT_SEED_MEDICATIONS = [
   {
     id: 'med-101',
     name: 'Lisinopril',
-    dosage: '10 mg (1 tablet)',
+    dosage: '10 mg',
     time: '08:00',
-    stock: 24,
+    stock: 27,
     category: 'pill',
-    notes: 'Take in the morning with water.',
+    neonColor: 'cyan',
+    notes: 'Take in the morning with food.',
     taken: true,
-    status: 'taken'
+    status: 'taken',
+    alarmStyle: 'gentle'
   },
   {
     id: 'med-102',
     name: 'Metformin XR',
-    dosage: '500 mg (1 tablet)',
+    dosage: '500 mg',
     time: '20:00',
-    stock: 42,
+    stock: 14,
     category: 'capsule',
-    notes: 'Take with evening meal.',
+    neonColor: 'purple',
+    notes: 'Take with evening dinner.',
     taken: false,
-    status: 'pending'
+    status: 'pending',
+    alarmStyle: 'urgent'
   },
   {
     id: 'med-103',
     name: 'Atorvastatin',
-    dosage: '20 mg (1 tablet)',
+    dosage: '20 mg',
     time: '21:00',
-    stock: 8, // Low Stock (< 10)
+    stock: 20,
     category: 'pill',
+    neonColor: 'teal',
     notes: 'Take at bedtime.',
     taken: false,
-    status: 'pending'
+    status: 'pending',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-104',
+    name: 'Amlodipine',
+    dosage: '5 mg',
+    time: '09:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'blue',
+    notes: 'Take once daily.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-105',
+    name: 'Losartan',
+    dosage: '50 mg',
+    time: '08:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'lime',
+    notes: 'Take in the morning.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'gentle'
+  },
+  {
+    id: 'med-106',
+    name: 'Omeprazole',
+    dosage: '20 mg',
+    time: '07:30',
+    stock: 30,
+    category: 'capsule',
+    neonColor: 'amber',
+    notes: 'Take before breakfast.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'silent_vibe'
+  },
+  {
+    id: 'med-107',
+    name: 'Levothyroxine',
+    dosage: '50 mcg',
+    time: '07:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'violet',
+    notes: 'Take before breakfast.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-108',
+    name: 'Cetirizine',
+    dosage: '10 mg',
+    time: '21:00',
+    stock: 20,
+    category: 'pill',
+    neonColor: 'pink',
+    notes: 'Take in the evening.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'gentle'
+  },
+  {
+    id: 'med-109',
+    name: 'Pantoprazole',
+    dosage: '40 mg',
+    time: '07:30',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'teal',
+    notes: 'Take before breakfast.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-110',
+    name: 'Montelukast',
+    dosage: '10 mg',
+    time: '21:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'purple',
+    notes: 'Take in the evening.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-111',
+    name: 'Vitamin D3',
+    dosage: '1000 IU',
+    time: '13:00',
+    stock: 60,
+    category: 'capsule',
+    neonColor: 'amber',
+    notes: 'Take with a meal.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'gentle'
+  },
+  {
+    id: 'med-112',
+    name: 'Calcium Carbonate',
+    dosage: '500 mg',
+    time: '13:00',
+    stock: 60,
+    category: 'pill',
+    neonColor: 'cyan',
+    notes: 'Take with food.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-113',
+    name: 'Folic Acid',
+    dosage: '5 mg',
+    time: '09:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'lime',
+    notes: 'Take once daily.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-114',
+    name: 'Aspirin',
+    dosage: '75 mg',
+    time: '08:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'rose',
+    notes: 'Take at the scheduled time.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'urgent'
+  },
+  {
+    id: 'med-115',
+    name: 'Clopidogrel',
+    dosage: '75 mg',
+    time: '08:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'blue',
+    notes: 'Take once daily.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-116',
+    name: 'Glimepiride',
+    dosage: '2 mg',
+    time: '08:00',
+    stock: 30,
+    category: 'pill',
+    neonColor: 'cyan',
+    notes: 'Take with breakfast.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'gentle'
+  },
+  {
+    id: 'med-117',
+    name: 'Paracetamol',
+    dosage: '500 mg',
+    time: '18:00',
+    stock: 20,
+    category: 'pill',
+    neonColor: 'skyblue',
+    notes: 'Use only as directed.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-118',
+    name: 'Ibuprofen',
+    dosage: '200 mg',
+    time: '14:00',
+    stock: 20,
+    category: 'pill',
+    neonColor: 'amber',
+    notes: 'Take with food.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'standard'
+  },
+  {
+    id: 'med-119',
+    name: 'Azithromycin',
+    dosage: '250 mg',
+    time: '09:00',
+    stock: 6,
+    category: 'pill',
+    neonColor: 'pink',
+    notes: 'Follow the prescribed schedule.',
+    taken: true,
+    status: 'taken',
+    alarmStyle: 'urgent'
+  },
+  {
+    id: 'med-120',
+    name: 'Amoxicillin',
+    dosage: '500 mg',
+    time: '08:00',
+    stock: 21,
+    category: 'capsule',
+    neonColor: 'violet',
+    notes: 'Follow the prescribed schedule.',
+    taken: false,
+    status: 'pending',
+    alarmStyle: 'standard'
   }
 ];
 
-// Default Seed Medication History Logs
-const DEFAULT_SEED_HISTORY = [
-  {
-    id: 'hist-1',
-    medId: 'med-101',
-    medName: 'Lisinopril',
-    dosage: '10 mg (1 tablet)',
-    scheduledTime: '08:00',
-    actualTakenTime: '08:02 AM',
-    status: 'Taken',
-    date: new Date().toISOString().split('T')[0],
-    timestamp: Date.now() - 3 * 3600 * 1000
-  }
+// 20 Sample Medications Catalog for History Log
+const SAMPLE_MEDICATIONS_CATALOG = [
+  { name: 'Lisinopril', dosage: '10 mg', quantity: '30 tablets', scheduledTime: '08:00 AM' },
+  { name: 'Metformin XR', dosage: '500 mg', quantity: '60 tablets', scheduledTime: '08:00 PM' },
+  { name: 'Atorvastatin', dosage: '20 mg', quantity: '30 tablets', scheduledTime: '09:00 PM' },
+  { name: 'Amlodipine', dosage: '5 mg', quantity: '30 tablets', scheduledTime: '09:00 AM' },
+  { name: 'Losartan', dosage: '50 mg', quantity: '30 tablets', scheduledTime: '08:00 AM' },
+  { name: 'Omeprazole', dosage: '20 mg', quantity: '30 capsules', scheduledTime: '07:30 AM' },
+  { name: 'Levothyroxine', dosage: '50 mcg', quantity: '30 tablets', scheduledTime: '07:00 AM' },
+  { name: 'Cetirizine', dosage: '10 mg', quantity: '20 tablets', scheduledTime: '09:00 PM' },
+  { name: 'Pantoprazole', dosage: '40 mg', quantity: '30 tablets', scheduledTime: '07:30 AM' },
+  { name: 'Montelukast', dosage: '10 mg', quantity: '30 tablets', scheduledTime: '09:00 PM' },
+  { name: 'Vitamin D3', dosage: '1000 IU', quantity: '60 tablets', scheduledTime: '01:00 PM' },
+  { name: 'Calcium Carbonate', dosage: '500 mg', quantity: '60 tablets', scheduledTime: '01:00 PM' },
+  { name: 'Azithromycin', dosage: '250 mg', quantity: '6 tablets', scheduledTime: '09:00 AM' },
+  { name: 'Amoxicillin', dosage: '500 mg', quantity: '21 capsules', scheduledTime: '08:00 AM' },
+  { name: 'Ibuprofen', dosage: '200 mg', quantity: '20 tablets', scheduledTime: '02:00 PM' },
+  { name: 'Paracetamol', dosage: '500 mg', quantity: '20 tablets', scheduledTime: '06:00 PM' },
+  { name: 'Folic Acid', dosage: '5 mg', quantity: '30 tablets', scheduledTime: '09:00 AM' },
+  { name: 'Aspirin', dosage: '75 mg', quantity: '30 tablets', scheduledTime: '08:00 AM' },
+  { name: 'Clopidogrel', dosage: '75 mg', quantity: '30 tablets', scheduledTime: '08:00 AM' },
+  { name: 'Glimepiride', dosage: '2 mg', quantity: '30 tablets', scheduledTime: '08:00 AM' }
 ];
+
+function generateSeedHistory() {
+  const records = [];
+  const baseDate = new Date(2026, 7, 23); // Aug 23, 2026
+  let counter = 1;
+
+  SAMPLE_MEDICATIONS_CATALOG.forEach((med, medIdx) => {
+    for (let entry = 0; entry < 4; entry++) {
+      const dayOffset = (medIdx * 3 + entry * 7) % 30;
+      const recordDate = new Date(baseDate);
+      recordDate.setDate(baseDate.getDate() - dayOffset);
+      const dateStr = recordDate.toISOString().split('T')[0];
+
+      let status = 'Taken';
+      const statusSeed = (medIdx + entry * 3) % 8;
+      if (statusSeed === 6) status = 'Missed';
+      if (statusSeed === 7) status = 'Pending';
+
+      let actualTime = '—';
+      if (status === 'Taken') {
+        const offsetMins = (medIdx + entry * 2) % 12 + 1;
+        const [timePart, ampm] = med.scheduledTime.split(' ');
+        const [hours, mins] = timePart.split(':');
+        const calcMins = (parseInt(mins, 10) + offsetMins) % 60;
+        const formattedMins = calcMins < 10 ? `0${calcMins}` : calcMins;
+        actualTime = `${hours}:${formattedMins} ${ampm}`;
+      }
+
+      records.push({
+        id: `hist-sample-${counter++}`,
+        medId: `med-sample-${medIdx + 1}`,
+        medName: med.name,
+        dosage: med.dosage,
+        quantity: med.quantity,
+        scheduledTime: med.scheduledTime,
+        actualTakenTime: actualTime,
+        status: status,
+        date: dateStr,
+        timestamp: recordDate.getTime()
+      });
+    }
+  });
+
+  return records.sort((a, b) => b.timestamp - a.timestamp);
+}
+
+// Default Seed Medication History Logs
+const DEFAULT_SEED_HISTORY = generateSeedHistory();
 
 // Document Ready Initialization
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,13 +368,57 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
+ * Global 12-Hour vs 24-Hour Time Format Converter.
+ */
+function formatTimeDisplay(timeStr, overrideFormat = null) {
+  if (!timeStr || typeof timeStr !== 'string') return '';
+
+  // If time string already has AM/PM or non-standard format (like "Now")
+  if (timeStr.toLowerCase().includes('am') || timeStr.toLowerCase().includes('pm') || timeStr === 'Now') {
+    if ((overrideFormat || window.appSettings?.timeFormat) === '24h' && (timeStr.includes('AM') || timeStr.includes('PM'))) {
+      const [timePart, ampm] = timeStr.split(' ');
+      let [h, m] = timePart.split(':').map(n => parseInt(n, 10));
+      if (ampm === 'PM' && h < 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+    return timeStr;
+  }
+
+  const format = overrideFormat || window.appSettings?.timeFormat || '12h';
+  const parts = timeStr.split(':');
+  if (parts.length < 2) return timeStr;
+
+  let hours = parseInt(parts[0], 10);
+  const minutes = parts[1];
+
+  if (isNaN(hours)) return timeStr;
+
+  if (format === '24h') {
+    return `${String(hours).padStart(2, '0')}:${minutes}`;
+  }
+
+  // 12-hour format with AM/PM
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+  return `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+}
+
+/**
  * Initializes state from localStorage or loads seed data.
  */
 function initAppState() {
   const savedMeds = localStorage.getItem('medimate_medications');
   if (savedMeds) {
     try {
-      window.medications = JSON.parse(savedMeds);
+      const parsed = JSON.parse(savedMeds);
+      if (Array.isArray(parsed) && parsed.length >= 10) {
+        window.medications = parsed;
+      } else {
+        window.medications = [...DEFAULT_SEED_MEDICATIONS];
+        saveMedicationsState();
+      }
     } catch (e) {
       window.medications = [...DEFAULT_SEED_MEDICATIONS];
     }
@@ -97,7 +430,13 @@ function initAppState() {
   const savedHistory = localStorage.getItem('medimate_history');
   if (savedHistory) {
     try {
-      window.medicationHistory = JSON.parse(savedHistory);
+      const parsed = JSON.parse(savedHistory);
+      if (Array.isArray(parsed) && parsed.length >= 10) {
+        window.medicationHistory = parsed;
+      } else {
+        window.medicationHistory = [...DEFAULT_SEED_HISTORY];
+        saveHistoryState();
+      }
     } catch (e) {
       window.medicationHistory = [...DEFAULT_SEED_HISTORY];
     }
@@ -111,6 +450,11 @@ function initAppState() {
     try {
       window.appSettings = { ...window.appSettings, ...JSON.parse(savedSettings) };
     } catch (e) {}
+  }
+
+  // Sync i18n language module
+  if (window.setLanguage && window.appSettings.language) {
+    window.setLanguage(window.appSettings.language);
   }
 
   syncSettingsFormUI();
@@ -144,14 +488,13 @@ function initLucideIcons() {
  * Single Page Application Tab Router (`switchTab`).
  */
 function switchTab(tabId, updateHash = true) {
-  // Check auth guard before switching protected views
   if (!window.currentUser && window.checkAuthGuard) {
     window.checkAuthGuard();
     return;
   }
 
   const tabs = document.querySelectorAll('.tab-content');
-  const navItems = document.querySelectorAll('.nav-item');
+  const navItems = document.querySelectorAll('.nav-item, .mobile-nav-item');
 
   tabs.forEach((tab) => {
     if (tab.id === `${tabId}-tab`) {
@@ -169,7 +512,6 @@ function switchTab(tabId, updateHash = true) {
     }
   });
 
-  // Re-render target tab view
   if (tabId === 'dashboard') {
     renderDashboard();
   } else if (tabId === 'medications') {
@@ -204,6 +546,7 @@ function refreshAllViews() {
   renderHistory();
   renderAnalytics();
   if (window.renderProfileView) window.renderProfileView();
+  if (window.applyTranslations) window.applyTranslations();
   initLucideIcons();
 }
 
@@ -243,10 +586,14 @@ function renderDashboard() {
     container.innerHTML = `
       <div class="empty-state text-center" style="padding: 2.5rem 1rem;">
         <i data-lucide="pill" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
-        <h3>No Medications Found</h3>
-        <p class="text-secondary">No matching medications scheduled.</p>
+        <h3>No Medications Scheduled</h3>
+        <p class="text-secondary">You currently have no matching medications in your schedule.</p>
+        <button class="primary-btn margin-top-sm" onclick="openModal('addModal')">
+          <i data-lucide="plus"></i> <span data-i18n="addMedication">Add New Medication</span>
+        </button>
       </div>
     `;
+    if (window.applyTranslations) window.applyTranslations();
     initLucideIcons();
     return;
   }
@@ -255,6 +602,7 @@ function renderDashboard() {
     const isTaken = med.taken || med.status === 'taken';
     const isLowStock = med.stock < 10;
     const categoryClass = med.category || 'pill';
+    const displayTime = formatTimeDisplay(med.time);
 
     return `
       <div class="med-item-row ${isTaken ? 'taken-status' : ''}" style="border-left-color: ${getCategoryColor(categoryClass)};">
@@ -265,8 +613,9 @@ function renderDashboard() {
           <div class="med-details">
             <h4>${escapeHtml(med.name)} <span class="text-secondary" style="font-size: 0.85rem; font-weight: normal;">(${escapeHtml(med.dosage)})</span></h4>
             <div class="med-meta">
-              <span><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${escapeHtml(med.time)}</span>
+              <span><i data-lucide="clock" style="width: 14px; height: 14px;"></i> ${escapeHtml(displayTime)}</span>
               <span>Stock: ${med.stock} ${isLowStock ? '<span class="badge badge-warning">⚠ Low Stock</span>' : ''}</span>
+              ${getAlarmStyleBadge(med.alarmStyle)}
             </div>
           </div>
         </div>
@@ -275,18 +624,41 @@ function renderDashboard() {
           ${
             isTaken
               ? `<span class="status-badge badge-taken"><i data-lucide="check"></i> ✓ Taken</span>`
-              : `<button class="take-action-btn" onclick="markTaken('${med.id}')"><i data-lucide="check"></i> Mark Taken</button>`
+              : `<button class="take-action-btn" onclick="markTaken('${med.id}')"><i data-lucide="check"></i> <span data-i18n="markTaken">Mark Taken</span></button>`
           }
         </div>
       </div>
     `;
   }).join('');
 
+  if (window.applyTranslations) window.applyTranslations();
   initLucideIcons();
 }
 
 /**
- * Marks medication dose as taken (`markTaken`).
+ * Returns HTML badge for medication alarm style.
+ */
+function getAlarmStyleBadge(style) {
+  if (!style || style === 'standard') return '';
+  let badgeClass = 'badge-info';
+  let label = 'Gentle';
+
+  if (style === 'gentle') {
+    badgeClass = 'badge-info';
+    label = 'Gentle';
+  } else if (style === 'urgent') {
+    badgeClass = 'badge-warning';
+    label = 'Urgent 🚨';
+  } else if (style === 'silent_vibe') {
+    badgeClass = 'badge-pending';
+    label = 'Silent 🔕';
+  }
+
+  return `<span class="badge ${badgeClass}" style="margin-left: 0.3rem;">${label}</span>`;
+}
+
+/**
+ * Marks medication dose as taken.
  */
 function markTaken(medId) {
   const med = window.medications.find((m) => m.id === medId);
@@ -302,7 +674,7 @@ function markTaken(medId) {
   med.stock = Math.max(0, med.stock - 1);
 
   const now = new Date();
-  const timeFormatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const timeFormatted = formatTimeDisplay(now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }));
   const dateFormatted = now.toISOString().split('T')[0];
 
   const historyRecord = {
@@ -310,7 +682,8 @@ function markTaken(medId) {
     medId: med.id,
     medName: med.name,
     dosage: med.dosage,
-    scheduledTime: med.time,
+    quantity: `${med.stock} doses`,
+    scheduledTime: formatTimeDisplay(med.time),
     actualTakenTime: timeFormatted,
     status: 'Taken',
     date: dateFormatted,
@@ -331,7 +704,7 @@ function markTaken(medId) {
 }
 
 /**
- * Renders Medications Cabinet Grid page (`renderMedications`).
+ * Renders Medications Cabinet Grid page.
  */
 function renderMedications() {
   const container = document.getElementById('medicationsGrid');
@@ -343,10 +716,14 @@ function renderMedications() {
     container.innerHTML = `
       <div class="empty-state text-center" style="grid-column: 1 / -1; padding: 3rem 1rem;">
         <i data-lucide="box" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
-        <h3>No Medications Found</h3>
-        <p class="text-secondary">Click "+ Add New Medicine" to populate your medication cabinet.</p>
+        <h3>Your Medication Cabinet is Empty</h3>
+        <p class="text-secondary">Click below to start tracking your prescribed medicines and stock levels.</p>
+        <button class="primary-btn margin-top-sm" onclick="openModal('addModal')">
+          <i data-lucide="plus"></i> <span data-i18n="addMedication">Add New Medication</span>
+        </button>
       </div>
     `;
+    if (window.applyTranslations) window.applyTranslations();
     initLucideIcons();
     return;
   }
@@ -355,22 +732,27 @@ function renderMedications() {
     const isLowStock = med.stock < 10;
     const categoryClass = med.category || 'pill';
     const isTaken = med.taken || med.status === 'taken';
+    const neonColor = med.neonColor || 'cyan';
+    const displayTime = formatTimeDisplay(med.time);
 
     return `
-      <div class="card med-card glow-teal">
+      <div class="card med-card glow-${neonColor}" data-neon-color="${neonColor}">
         <div>
           <div class="med-card-top">
             <div class="med-pill-icon ${categoryClass}">
               <i data-lucide="${getCategoryIcon(categoryClass)}"></i>
             </div>
-            <span class="badge ${isTaken ? 'badge-taken' : 'badge-pending'}">
-              ${isTaken ? '✓ Taken' : 'Pending ⏳'}
-            </span>
+            <div style="display: flex; gap: 0.3rem; align-items: center;">
+              ${getAlarmStyleBadge(med.alarmStyle)}
+              <span class="badge ${isTaken ? 'badge-taken' : 'badge-pending'}">
+                ${isTaken ? '✓ Taken' : 'Pending ⏳'}
+              </span>
+            </div>
           </div>
 
           <h3 style="font-size: 1.15rem; font-weight: 600;">${escapeHtml(med.name)}</h3>
           <p class="text-secondary" style="font-size: 0.9rem; margin-top: 0.2rem;">Dosage: <strong>${escapeHtml(med.dosage)}</strong></p>
-          <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.2rem;"><i data-lucide="clock" style="width: 14px;"></i> Scheduled: <strong>${escapeHtml(med.time)}</strong></p>
+          <p class="text-secondary" style="font-size: 0.85rem; margin-top: 0.2rem;"><i data-lucide="clock" style="width: 14px;"></i> Scheduled: <strong>${escapeHtml(displayTime)}</strong></p>
           ${med.notes ? `<p class="text-muted" style="font-size: 0.8rem; margin-top: 0.5rem; font-style: italic;">"${escapeHtml(med.notes)}"</p>` : ''}
         </div>
 
@@ -393,6 +775,7 @@ function renderMedications() {
     `;
   }).join('');
 
+  if (window.applyTranslations) window.applyTranslations();
   initLucideIcons();
 }
 
@@ -430,6 +813,7 @@ function renderTimelineGroup(title, groupMeds, icon) {
           : `<div class="medication-list margin-top-xs">
               ${groupMeds.map((med) => {
                 const isTaken = med.taken || med.status === 'taken';
+                const displayTime = formatTimeDisplay(med.time);
                 return `
                   <div class="med-item-row ${isTaken ? 'taken-status' : ''}">
                     <div class="med-left-info">
@@ -438,7 +822,7 @@ function renderTimelineGroup(title, groupMeds, icon) {
                       </div>
                       <div>
                         <strong>${escapeHtml(med.name)}</strong> (${escapeHtml(med.dosage)})
-                        <span class="text-secondary" style="font-size: 0.85rem; display: block;">Scheduled: ${escapeHtml(med.time)}</span>
+                        <span class="text-secondary" style="font-size: 0.85rem; display: block;">Scheduled: ${escapeHtml(displayTime)} ${getAlarmStyleBadge(med.alarmStyle)}</span>
                       </div>
                     </div>
                     <div>
@@ -453,21 +837,64 @@ function renderTimelineGroup(title, groupMeds, icon) {
   `;
 }
 
+window.historyFilter = 'all';
+window.historySearchQuery = '';
+
+function setHistoryFilter(filterType) {
+  window.historyFilter = filterType;
+
+  document.querySelectorAll('[data-history-filter]').forEach((pill) => {
+    if (pill.dataset.historyFilter === filterType) {
+      pill.classList.add('active');
+    } else {
+      pill.classList.remove('active');
+    }
+  });
+
+  renderHistory();
+}
+
+function handleHistorySearchFilter() {
+  const input = document.getElementById('historySearch');
+  window.historySearchQuery = (input?.value || '').toLowerCase().trim();
+  renderHistory();
+}
+
 /**
- * Renders Medication History Log Table (`renderHistory`).
+ * Renders Medication History Log Table.
  */
 function renderHistory() {
   const container = document.getElementById('historyTableContainer');
   if (!container) return;
 
-  const history = window.medicationHistory || [];
+  let history = window.medicationHistory || [];
+
+  history = history.filter((record) => {
+    const q = window.historySearchQuery;
+    const matchQuery =
+      !q ||
+      record.medName.toLowerCase().includes(q) ||
+      record.dosage.toLowerCase().includes(q) ||
+      (record.quantity && record.quantity.toLowerCase().includes(q)) ||
+      record.date.includes(q) ||
+      record.status.toLowerCase().includes(q);
+
+    if (!matchQuery) return false;
+
+    const s = window.historyFilter;
+    if (s === 'taken') return record.status === 'Taken';
+    if (s === 'missed') return record.status === 'Missed';
+    if (s === 'pending') return record.status === 'Pending';
+
+    return true;
+  });
 
   if (history.length === 0) {
     container.innerHTML = `
       <div class="empty-state text-center" style="padding: 2.5rem 1rem;">
         <i data-lucide="history" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 0.5rem;"></i>
-        <h3>No History Records</h3>
-        <p class="text-secondary">Doses marked as taken will log historical records here.</p>
+        <h3>No Matching History Records</h3>
+        <p class="text-secondary">Try adjusting your search query or filter selection.</p>
       </div>
     `;
     initLucideIcons();
@@ -475,12 +902,13 @@ function renderHistory() {
   }
 
   container.innerHTML = `
-    <div style="overflow-x: auto;">
-      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem;">
+    <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+      <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; min-width: 680px;">
         <thead>
           <tr style="border-bottom: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.825rem; text-transform: uppercase;">
             <th style="padding: 0.75rem;">Medicine</th>
             <th style="padding: 0.75rem;">Dosage</th>
+            <th style="padding: 0.75rem;">Quantity</th>
             <th style="padding: 0.75rem;">Scheduled</th>
             <th style="padding: 0.75rem;">Actual Time</th>
             <th style="padding: 0.75rem;">Date</th>
@@ -488,20 +916,39 @@ function renderHistory() {
           </tr>
         </thead>
         <tbody>
-          ${history.map((record) => `
-            <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
-              <td style="padding: 0.85rem; font-weight: 600;">${escapeHtml(record.medName)}</td>
-              <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.dosage)}</td>
-              <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.scheduledTime)}</td>
-              <td style="padding: 0.85rem;">${escapeHtml(record.actualTakenTime || '-')}</td>
-              <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.date)}</td>
-              <td style="padding: 0.85rem;">
-                <span class="status-badge ${record.status === 'Taken' ? 'badge-taken' : record.status === 'Pending' ? 'badge-pending' : 'badge-warning'}">
-                  ${record.status === 'Taken' ? '✓ Taken' : record.status}
-                </span>
-              </td>
-            </tr>
-          `).join('')}
+          ${history.map((record) => {
+            const badgeClass =
+              record.status === 'Taken'
+                ? 'badge-taken'
+                : record.status === 'Missed'
+                ? 'badge-warning'
+                : 'badge-pending';
+            const iconSymbol =
+              record.status === 'Taken'
+                ? '✓ Taken'
+                : record.status === 'Missed'
+                ? '⚠ Missed'
+                : '⏳ Pending';
+
+            const displayScheduled = formatTimeDisplay(record.scheduledTime);
+            const displayActual = formatTimeDisplay(record.actualTakenTime);
+
+            return `
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.04);">
+                <td style="padding: 0.85rem; font-weight: 600; color: var(--text-main);">${escapeHtml(record.medName)}</td>
+                <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.dosage)}</td>
+                <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.quantity || '30 tablets')}</td>
+                <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(displayScheduled)}</td>
+                <td style="padding: 0.85rem;">${escapeHtml(displayActual || '—')}</td>
+                <td style="padding: 0.85rem; color: var(--text-secondary);">${escapeHtml(record.date)}</td>
+                <td style="padding: 0.85rem;">
+                  <span class="status-badge ${badgeClass}">
+                    ${iconSymbol}
+                  </span>
+                </td>
+              </tr>
+            `;
+          }).join('')}
         </tbody>
       </table>
     </div>
@@ -511,16 +958,64 @@ function renderHistory() {
 }
 
 /**
- * Saves a new medication (`saveNewMedication`).
+ * Bidirectional Sync between 24h Time Input and AM/PM Selector.
+ */
+function syncAmPmFromTime(prefix) {
+  const timeInput = document.getElementById(`${prefix}MedTime`);
+  const ampmSelect = document.getElementById(`${prefix}MedAmPm`);
+  if (!timeInput || !ampmSelect) return;
+
+  const val = timeInput.value;
+  if (!val || !val.includes(':')) return;
+
+  const parts = val.split(':');
+  const h = parseInt(parts[0], 10);
+  if (!isNaN(h)) {
+    ampmSelect.value = h >= 12 ? 'PM' : 'AM';
+  }
+}
+
+function syncTimeFromAmPm(prefix) {
+  const timeInput = document.getElementById(`${prefix}MedTime`);
+  const ampmSelect = document.getElementById(`${prefix}MedAmPm`);
+  if (!timeInput || !ampmSelect) return;
+
+  let val = timeInput.value;
+  if (!val || !val.includes(':')) {
+    val = ampmSelect.value === 'PM' ? '20:00' : '08:00';
+    timeInput.value = val;
+    return;
+  }
+
+  let [h, m] = val.split(':').map((n) => parseInt(n, 10));
+  if (isNaN(h) || isNaN(m)) return;
+
+  const isPm = ampmSelect.value === 'PM';
+  if (isPm && h < 12) {
+    h += 12;
+  } else if (!isPm && h >= 12) {
+    h -= 12;
+  }
+
+  const newH = String(h).padStart(2, '0');
+  const newM = String(m).padStart(2, '0');
+  timeInput.value = `${newH}:${newM}`;
+}
+
+/**
+ * Saves a new medication.
  */
 function saveNewMedication(event) {
   event.preventDefault();
+
+  syncTimeFromAmPm('add');
 
   const name = document.getElementById('addMedName').value.trim();
   const dosage = document.getElementById('addMedDosage').value.trim();
   const time = document.getElementById('addMedTime').value;
   const stock = parseInt(document.getElementById('addMedStock').value, 10);
   const category = document.getElementById('addMedCategory').value;
+  const alarmStyle = document.getElementById('addMedAlarmStyle')?.value || 'standard';
   const notes = document.getElementById('addMedNotes').value.trim();
 
   if (!name || !dosage || !time || isNaN(stock) || stock < 0) {
@@ -535,6 +1030,7 @@ function saveNewMedication(event) {
     time: time,
     stock: stock,
     category: category,
+    alarmStyle: alarmStyle,
     notes: notes,
     taken: false,
     status: 'pending'
@@ -563,8 +1059,12 @@ function openEditModal(medId) {
   document.getElementById('editMedTime').value = med.time;
   document.getElementById('editMedStock').value = med.stock;
   document.getElementById('editMedCategory').value = med.category || 'pill';
+  if (document.getElementById('editMedAlarmStyle')) {
+    document.getElementById('editMedAlarmStyle').value = med.alarmStyle || 'standard';
+  }
   document.getElementById('editMedNotes').value = med.notes || '';
 
+  syncAmPmFromTime('edit');
   openModal('editModal');
 }
 
@@ -573,6 +1073,8 @@ function openEditModal(medId) {
  */
 function saveEditedMedication(event) {
   event.preventDefault();
+
+  syncTimeFromAmPm('edit');
 
   const id = document.getElementById('editMedId').value;
   const med = window.medications.find((m) => m.id === id);
@@ -583,6 +1085,7 @@ function saveEditedMedication(event) {
   const time = document.getElementById('editMedTime').value;
   const stock = parseInt(document.getElementById('editMedStock').value, 10);
   const category = document.getElementById('editMedCategory').value;
+  const alarmStyle = document.getElementById('editMedAlarmStyle')?.value || 'standard';
   const notes = document.getElementById('editMedNotes').value.trim();
 
   if (!name || !dosage || !time || isNaN(stock) || stock < 0) {
@@ -595,6 +1098,7 @@ function saveEditedMedication(event) {
   med.time = time;
   med.stock = stock;
   med.category = category;
+  med.alarmStyle = alarmStyle;
   med.notes = notes;
 
   saveMedicationsState();
@@ -633,6 +1137,13 @@ function confirmDeleteMedication() {
 function openModal(modalId) {
   const modal = document.getElementById(modalId);
   if (modal) modal.classList.add('active');
+  if (modalId === 'addModal') {
+    const timeInput = document.getElementById('addMedTime');
+    if (timeInput && !timeInput.value) {
+      timeInput.value = '08:00';
+    }
+    syncAmPmFromTime('add');
+  }
 }
 
 function closeModal(modalId) {
@@ -739,21 +1250,109 @@ function getCategoryColor(category) {
 }
 
 /**
- * Settings Form.
+ * Custom Alarm Ringtone Audio Upload Handler.
+ * Validates audio file size (max 3.5 MB) and duration (max 60 sec).
+ */
+function handleCustomRingtoneUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  // Validate format
+  const validFormats = ['audio/mp3', 'audio/mpeg', 'audio/wav', 'audio/x-wav', 'audio/m4a', 'audio/x-m4a', 'audio/aac', 'audio/mp4'];
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!['mp3', 'wav', 'm4a'].includes(ext) && !validFormats.includes(file.type)) {
+    showToast('Unsupported audio format. Please upload MP3, WAV, or M4A.', 'error');
+    return;
+  }
+
+  // Validate file size limit (max 3.5 MB)
+  const MAX_SIZE_BYTES = 3.5 * 1024 * 1024;
+  if (file.size > MAX_SIZE_BYTES) {
+    showToast('File size exceeds limit (Max 3.5 MB). Please choose a smaller audio file.', 'error');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+
+    // Test audio duration limit
+    const tempAudio = new Audio();
+    tempAudio.src = dataUrl;
+    tempAudio.onloadedmetadata = () => {
+      if (tempAudio.duration > 60) {
+        showToast('Audio file duration is too long (Max 60 seconds allowed).', 'warning');
+      }
+
+      window.appSettings.customRingtoneUrl = dataUrl;
+      window.appSettings.customRingtoneName = file.name;
+      localStorage.setItem('medimate_settings', JSON.stringify(window.appSettings));
+
+      syncSettingsFormUI();
+      showToast(`Custom tone "${file.name}" uploaded successfully.`, 'success');
+    };
+    tempAudio.onerror = () => {
+      showToast('Could not decode audio file. Please try another audio file.', 'error');
+    };
+  };
+
+  reader.onerror = () => {
+    showToast('Error reading file. Please try again.', 'error');
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/**
+ * Removes user custom uploaded ringtone and resets to default tone.
+ */
+function removeCustomRingtone() {
+  window.appSettings.customRingtoneUrl = null;
+  window.appSettings.customRingtoneName = null;
+  localStorage.setItem('medimate_settings', JSON.stringify(window.appSettings));
+
+  syncSettingsFormUI();
+  showToast('Reset to default medication chime.', 'info');
+}
+
+/**
+ * Save Settings Handler.
  */
 function saveSettings() {
+  const langSelect = document.getElementById('settingLanguage');
+  const timeFormatSelect = document.getElementById('settingTimeFormat');
+  const alarmStyleSelect = document.getElementById('settingDefaultAlarmStyle');
+
+  const selectedLang = langSelect ? langSelect.value : window.appSettings.language || 'en';
+  const selectedTimeFormat = timeFormatSelect ? timeFormatSelect.value : window.appSettings.timeFormat || '12h';
+  const selectedAlarmStyle = alarmStyleSelect ? alarmStyleSelect.value : window.appSettings.defaultAlarmStyle || 'standard';
+
   window.appSettings = {
+    ...window.appSettings,
     enableReminders: document.getElementById('settingEnableReminders').checked,
     voiceReminders: document.getElementById('settingVoiceReminders').checked,
     alarmSound: document.getElementById('settingAlarmSound').checked,
     snoozeMinutes: parseInt(document.getElementById('settingSnoozeMinutes').value, 10),
-    lowStockAlerts: document.getElementById('settingLowStockAlerts').checked
+    lowStockAlerts: document.getElementById('settingLowStockAlerts').checked,
+    language: selectedLang,
+    timeFormat: selectedTimeFormat,
+    defaultAlarmStyle: selectedAlarmStyle
   };
 
   localStorage.setItem('medimate_settings', JSON.stringify(window.appSettings));
-  showToast('Settings saved.', 'success');
+
+  // Apply language update dynamically
+  if (window.setLanguage) {
+    window.setLanguage(selectedLang);
+  }
+
+  showToast('Settings updated successfully.', 'success');
+  refreshAllViews();
 }
 
+/**
+ * Synchronizes Settings UI Controls.
+ */
 function syncSettingsFormUI() {
   const s = window.appSettings;
   const enableRem = document.getElementById('settingEnableReminders');
@@ -761,12 +1360,34 @@ function syncSettingsFormUI() {
   const alarmSound = document.getElementById('settingAlarmSound');
   const snoozeMin = document.getElementById('settingSnoozeMinutes');
   const lowStock = document.getElementById('settingLowStockAlerts');
+  const langSelect = document.getElementById('settingLanguage');
+  const timeFormatSelect = document.getElementById('settingTimeFormat');
+  const alarmStyleSelect = document.getElementById('settingDefaultAlarmStyle');
+
+  const customPill = document.getElementById('customRingtonePill');
+  const customName = document.getElementById('customRingtoneNameDisplay');
+  const previewBtn = document.getElementById('previewCustomToneBtn');
+  const resetBtn = document.getElementById('resetCustomToneBtn');
 
   if (enableRem) enableRem.checked = s.enableReminders;
   if (voiceRem) voiceRem.checked = s.voiceReminders;
   if (alarmSound) alarmSound.checked = s.alarmSound;
   if (snoozeMin) snoozeMin.value = s.snoozeMinutes;
   if (lowStock) lowStock.checked = s.lowStockAlerts;
+  if (langSelect) langSelect.value = s.language || 'en';
+  if (timeFormatSelect) timeFormatSelect.value = s.timeFormat || '12h';
+  if (alarmStyleSelect) alarmStyleSelect.value = s.defaultAlarmStyle || 'standard';
+
+  if (s.customRingtoneUrl) {
+    if (customPill) customPill.style.display = 'inline-flex';
+    if (customName) customName.textContent = s.customRingtoneName || 'Custom Audio Tone';
+    if (previewBtn) previewBtn.disabled = false;
+    if (resetBtn) resetBtn.style.display = 'inline-flex';
+  } else {
+    if (customPill) customPill.style.display = 'none';
+    if (previewBtn) previewBtn.disabled = false;
+    if (resetBtn) resetBtn.style.display = 'none';
+  }
 }
 
 /**
@@ -853,6 +1474,8 @@ window.deleteMed = deleteMed;
 window.confirmDeleteMedication = confirmDeleteMedication;
 window.setFilter = setFilter;
 window.handleSearchFilter = handleSearchFilter;
+window.setHistoryFilter = setHistoryFilter;
+window.handleHistorySearchFilter = handleHistorySearchFilter;
 window.showToast = showToast;
 window.saveSettings = saveSettings;
 window.exportAppData = exportAppData;
@@ -861,3 +1484,8 @@ window.clearHistoryLog = clearHistoryLog;
 window.toggleMobileSidebar = toggleMobileSidebar;
 window.escapeHtml = escapeHtml;
 window.refreshAllViews = refreshAllViews;
+window.formatTimeDisplay = formatTimeDisplay;
+window.handleCustomRingtoneUpload = handleCustomRingtoneUpload;
+window.removeCustomRingtone = removeCustomRingtone;
+window.syncAmPmFromTime = syncAmPmFromTime;
+window.syncTimeFromAmPm = syncTimeFromAmPm;

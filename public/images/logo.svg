@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Purple Gradient -->
+    <linearGradient id="purpleGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#b026ff" />
+      <stop offset="100%" stop-color="#7000ff" />
+    </linearGradient>
+
+    <!-- Blue Gradient -->
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0088ff" />
+      <stop offset="100%" stop-color="#0055ff" />
+    </linearGradient>
+
+    <!-- Cyan Gradient -->
+    <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00f3ff" />
+      <stop offset="100%" stop-color="#00bfff" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    .brand-title-text {
+      font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
+      font-weight: 700;
+      font-size: 54px;
+      fill: #ffffff;
+      letter-spacing: -1px;
+    }
+    .brand-sub-text {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-weight: 500;
+      font-size: 15px;
+      fill: #00f3ff;
+      letter-spacing: 0.5px;
+      opacity: 0.95;
+    }
+  </style>
+
+  <g transform="translate(0, 10)">
+    <!-- Icon Shapes matching double-leaf pill gradient art -->
+    <!-- Left Crescent (Purple) -->
+    <path d="M 215 90 C 135 90 70 155 70 235 C 70 315 135 380 215 380 C 265 380 308 355 334 316 C 300 330 250 330 205 295 C 160 260 160 200 185 150 C 205 110 245 95 270 93 C 253 91 234 90 215 90 Z" fill="url(#purpleGrad)" filter="url(#neonGlow)" />
+
+    <!-- Center Leaf (Blue) -->
+    <path d="M 245 115 C 245 115 315 125 345 190 C 375 255 330 335 245 340 C 295 330 325 280 315 230 C 305 180 265 140 245 115 Z" fill="url(#blueGrad)" filter="url(#neonGlow)" />
+
+    <!-- Right Leaf (Cyan) -->
+    <path d="M 295 145 C 295 145 365 160 395 215 C 425 270 385 330 315 335 C 365 320 385 270 370 220 C 355 175 320 155 295 145 Z" fill="url(#cyanGrad)" filter="url(#neonGlow)" />
+
+    <!-- Brand Text: medimate -->
+    <text x="250" y="425" text-anchor="middle" class="brand-title-text">medimate</text>
+
+    <!-- Subtitle: Attractive Tagline -->
+    <text x="250" y="458" text-anchor="middle" class="brand-sub-text">Health Dashboard</text>
+  </g>
+</svg>

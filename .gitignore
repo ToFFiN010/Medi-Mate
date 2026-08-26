@@ -1,5 +1,19 @@
+# Dependencies
 node_modules/
+
+# Environment variables & secrets
 .env
-*.log
+.env.*
+!.env.example
+
+# Build & Dist
+build/
+dist/
+
+# OS & Editor files
 .DS_Store
 Thumbs.db
+*.log
+.vscode/
+.idea/
+.gemini/

@@ -61,49 +61,100 @@ function checkScheduledReminders() {
 }
 
 /**
- * Opens alarm reminder modal and triggers sound/voice dynamically.
+ * Opens alarm reminder modal and triggers sound/voice dynamically according to alarm style.
  */
 function triggerMedicationAlarm(med) {
   currentActiveAlarmMed = med;
+
+  const alarmStyle = med.alarmStyle || (window.appSettings ? window.appSettings.defaultAlarmStyle : 'standard') || 'standard';
+
+  // Format scheduled time according to user 12h/24h preference
+  const formattedTime = window.formatTimeDisplay ? window.formatTimeDisplay(med.time) : med.time;
 
   // Dynamically update Modal UI
   const nameEl = document.getElementById('alarmMedName');
   const dosageEl = document.getElementById('alarmMedDosage');
   const timeEl = document.getElementById('alarmMedTime');
+  const modalCard = document.querySelector('.alarm-modal-card');
+  const styleBadgeEl = document.getElementById('alarmStyleBadge');
 
   if (nameEl) nameEl.textContent = med.name;
   if (dosageEl) dosageEl.textContent = med.dosage;
-  if (timeEl) timeEl.innerHTML = `<i data-lucide="clock"></i> Scheduled for ${med.time}`;
+  if (timeEl) {
+    const timeLabel = window.t ? window.t('scheduledFor', { time: formattedTime }) : `Scheduled for ${formattedTime}`;
+    timeEl.innerHTML = `<i data-lucide="clock"></i> ${timeLabel}`;
+  }
+
+  // Update Alarm Style Badge & Card Animation
+  if (styleBadgeEl) {
+    let badgeText = 'Standard Alarm';
+    let badgeClass = 'badge-info';
+
+    if (alarmStyle === 'gentle') {
+      badgeText = window.t ? window.t('alarmStyleGentle') : 'Gentle Alarm';
+      badgeClass = 'badge-info';
+    } else if (alarmStyle === 'urgent') {
+      badgeText = window.t ? window.t('alarmStyleUrgent') : 'Urgent Alarm';
+      badgeClass = 'badge-warning';
+    } else if (alarmStyle === 'silent_vibe') {
+      badgeText = window.t ? window.t('alarmStyleSilentVibe') : 'Silent + Vibration';
+      badgeClass = 'badge-pending';
+    } else {
+      badgeText = window.t ? window.t('alarmStyleStandard') : 'Standard Alarm';
+    }
+    styleBadgeEl.textContent = badgeText;
+    styleBadgeEl.className = `badge ${badgeClass}`;
+  }
+
+  if (modalCard) {
+    if (alarmStyle === 'urgent') {
+      modalCard.classList.add('urgent-pulse-card');
+    } else {
+      modalCard.classList.remove('urgent-pulse-card');
+    }
+  }
 
   if (window.lucide) window.lucide.createIcons();
 
   openModal('alarmModal');
 
-  // Play Sound & Voice according to user settings
-  if (window.appSettings.alarmSound) {
-    playChime();
+  // Play Sound & Alarm Ringtone according to style
+  if (window.appSettings && (window.appSettings.alarmSound || alarmStyle === 'urgent')) {
+    if (window.playAlarmTone) {
+      window.playAlarmTone(alarmStyle);
+    } else if (window.playChime) {
+      window.playChime(alarmStyle);
+    }
+  } else if (alarmStyle === 'silent_vibe') {
+    if (window.playAlarmTone) window.playAlarmTone('silent_vibe');
   }
 
-  if (window.appSettings.voiceReminders) {
-    speakVoiceReminder(med.name, med.dosage);
+  // Localized Voice Reminder (skip if silent style)
+  if (window.appSettings && window.appSettings.voiceReminders && alarmStyle !== 'silent_vibe') {
+    if (window.speakVoiceReminder) {
+      window.speakVoiceReminder(med.name, med.dosage);
+    }
   }
 
   // Toast notification
-  showToast(`Reminder: ${med.name} (${med.dosage}) is due now.`, 'warning');
+  const dueMsg = window.t ? window.t('reminderDueAlert', { name: med.name, dosage: med.dosage }) : `Reminder: ${med.name} (${med.dosage}) is due now.`;
+  showToast(dueMsg, 'warning');
 }
 
 /**
  * Handles test alarm button in Settings.
  */
 function triggerTestAlarm() {
+  const currentFormat = window.appSettings ? window.appSettings.timeFormat : '12h';
   const testMed = {
     id: 'test-999',
     name: 'Metformin XR (Test Alarm)',
     dosage: '500 mg (1 tablet)',
-    time: 'Now',
+    time: currentFormat === '24h' ? '20:00' : '08:00 PM',
     taken: false,
     status: 'pending',
-    stock: 42
+    stock: 42,
+    alarmStyle: window.appSettings ? window.appSettings.defaultAlarmStyle : 'standard'
   };
 
   triggerMedicationAlarm(testMed);
@@ -132,7 +183,7 @@ function handleAlarmSnooze() {
     return;
   }
 
-  const minutes = parseInt(window.appSettings.snoozeMinutes || 10, 10);
+  const minutes = parseInt(window.appSettings ? window.appSettings.snoozeMinutes || 10 : 10, 10);
   const snoozeDelayMs = minutes * 60 * 1000;
 
   snoozedRemindersMap.set(currentActiveAlarmMed.id, Date.now() + snoozeDelayMs);
@@ -142,11 +193,16 @@ function handleAlarmSnooze() {
 }
 
 /**
- * Dismisses alarm modal.
+ * Dismisses alarm modal and stops playing alarm tones & vibration loops.
  */
 function dismissAlarm() {
   closeModal('alarmModal');
   currentActiveAlarmMed = null;
+
+  if (window.stopAlarmAudio) {
+    window.stopAlarmAudio();
+  }
+
   if (window.speechSynthesis) {
     window.speechSynthesis.cancel();
   }

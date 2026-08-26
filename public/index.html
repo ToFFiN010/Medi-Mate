@@ -15,17 +15,96 @@
 </head>
 <body class="dark-theme">
 
+  <!-- 6 to 7 SECOND INTRODUCTORY OPENING SPLASH ANIMATION OVERLAY -->
+  <div id="splashScreen" class="splash-screen-overlay">
+    <div class="splash-backdrop-glow"></div>
+    <div class="splash-content text-center">
+      <!-- Animated Double-Leaf Pill Gradient Logo -->
+      <div class="splash-logo-container">
+        <div class="splash-pulse-ring"></div>
+        <svg class="splash-logo-svg" viewBox="0 0 300 220" width="180" height="130">
+          <defs>
+            <linearGradient id="splashPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#b026ff" />
+              <stop offset="100%" stop-color="#7000ff" />
+            </linearGradient>
+            <linearGradient id="splashBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#0088ff" />
+              <stop offset="100%" stop-color="#0055ff" />
+            </linearGradient>
+            <linearGradient id="splashCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#00f3ff" />
+              <stop offset="100%" stop-color="#00bfff" />
+            </linearGradient>
+            <filter id="splashGlow" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+          <g transform="translate(10, 0)">
+            <path class="splash-path splash-purple" d="M 135 25 C 85 25 45 65 45 115 C 45 165 85 205 135 205 C 165 205 192 190 208 165 C 186 174 155 174 126 152 C 98 130 98 92 114 61 C 127 36 152 27 168 26 C 158 25 146 25 135 25 Z" fill="url(#splashPurple)" filter="url(#splashGlow)" />
+            <path class="splash-path splash-blue" d="M 155 40 C 155 40 198 46 217 87 C 236 128 207 178 155 181 C 186 175 205 144 198 112 C 192 80 167 55 155 40 Z" fill="url(#splashBlue)" filter="url(#splashGlow)" />
+            <path class="splash-path splash-cyan" d="M 186 59 C 186 59 230 68 249 103 C 268 138 243 176 199 179 C 230 169 243 138 233 106 C 224 78 202 65 186 59 Z" fill="url(#splashCyan)" filter="url(#splashGlow)" />
+          </g>
+        </svg>
+      </div>
+
+      <!-- Animated Brand Text: medimate -->
+      <h1 class="splash-brand-title">medimate</h1>
+
+      <!-- Rotating Slogan / Attractive Health Words -->
+      <div class="splash-slogan-box">
+        <p id="splashSloganText" class="splash-slogan-text">Your Health, Your Priority</p>
+      </div>
+
+      <!-- Progress Track Indicator for 6.5s animation sequence -->
+      <div class="splash-progress-track">
+        <div id="splashProgressBar" class="splash-progress-bar"></div>
+      </div>
+
+      <!-- Skip Button -->
+      <button type="button" class="splash-skip-btn" onclick="dismissSplashScreen()">
+        <span>Skip Intro</span>
+        <i data-lucide="arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
   <!-- AUTHENTICATION CONTAINER (Login / Signup / Forgot Password) -->
   <div id="authContainer" class="auth-container hidden">
     <div class="auth-card-wrapper">
       
       <!-- BRAND LOGO HEADER -->
       <div class="auth-brand-header text-center">
-        <div class="logo-icon auth-logo-icon">
-          <i data-lucide="pill"></i>
+        <div class="logo-icon-main">
+          <svg class="medimate-logo-svg" viewBox="0 0 300 220" width="140" height="100">
+            <defs>
+              <linearGradient id="brandPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#b026ff" />
+                <stop offset="100%" stop-color="#7000ff" />
+              </linearGradient>
+              <linearGradient id="brandBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#0088ff" />
+                <stop offset="100%" stop-color="#0055ff" />
+              </linearGradient>
+              <linearGradient id="brandCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f3ff" />
+                <stop offset="100%" stop-color="#00bfff" />
+              </linearGradient>
+              <filter id="brandGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="6" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+            <g transform="translate(10, 0)">
+              <path d="M 135 25 C 85 25 45 65 45 115 C 45 165 85 205 135 205 C 165 205 192 190 208 165 C 186 174 155 174 126 152 C 98 130 98 92 114 61 C 127 36 152 27 168 26 C 158 25 146 25 135 25 Z" fill="url(#brandPurple)" filter="url(#brandGlow)" />
+              <path d="M 155 40 C 155 40 198 46 217 87 C 236 128 207 178 155 181 C 186 175 205 144 198 112 C 192 80 167 55 155 40 Z" fill="url(#brandBlue)" filter="url(#brandGlow)" />
+              <path d="M 186 59 C 186 59 230 68 249 103 C 268 138 243 176 199 179 C 230 169 243 138 233 106 C 224 78 202 65 186 59 Z" fill="url(#brandCyan)" filter="url(#brandGlow)" />
+            </g>
+          </svg>
         </div>
-        <h1 class="auth-brand-title">Medi<span class="accent-text">Mate</span></h1>
-        <p class="text-secondary auth-subtitle">Medication Management & AI Health Assistant</p>
+        <h1 class="auth-brand-title medimate-brand-title">medimate</h1>
+        <p class="text-secondary auth-subtitle medimate-tagline" data-i18n="appSubtitle">Health Dashboard</p>
       </div>
 
       <!-- LOGIN SCREEN -->
@@ -180,10 +259,33 @@
     <aside class="sidebar" id="sidebar">
       <div class="sidebar-header">
         <div class="brand">
-          <div class="logo-icon">
-            <i data-lucide="pill"></i>
+          <div class="logo-icon sidebar-logo-icon">
+            <svg viewBox="0 0 300 220" width="34" height="34">
+              <defs>
+                <linearGradient id="sbPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#b026ff" />
+                  <stop offset="100%" stop-color="#7000ff" />
+                </linearGradient>
+                <linearGradient id="sbBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0088ff" />
+                  <stop offset="100%" stop-color="#0055ff" />
+                </linearGradient>
+                <linearGradient id="sbCyan" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#00f3ff" />
+                  <stop offset="100%" stop-color="#00bfff" />
+                </linearGradient>
+              </defs>
+              <g transform="translate(10, 0)">
+                <path d="M 135 25 C 85 25 45 65 45 115 C 45 165 85 205 135 205 C 165 205 192 190 208 165 C 186 174 155 174 126 152 C 98 130 98 92 114 61 C 127 36 152 27 168 26 C 158 25 146 25 135 25 Z" fill="url(#sbPurple)" />
+                <path d="M 155 40 C 155 40 198 46 217 87 C 236 128 207 178 155 181 C 186 175 205 144 198 112 C 192 80 167 55 155 40 Z" fill="url(#sbBlue)" />
+                <path d="M 186 59 C 186 59 230 68 249 103 C 268 138 243 176 199 179 C 230 169 243 138 233 106 C 224 78 202 65 186 59 Z" fill="url(#sbCyan)" />
+              </g>
+            </svg>
           </div>
-          <span class="brand-title">Medi<span class="accent-text">Mate</span></span>
+          <div class="sidebar-brand-text">
+            <span class="brand-title medimate-brand-title">medimate</span>
+            <span class="brand-sub-tagline" data-i18n="appSubtitle">Health Dashboard</span>
+          </div>
         </div>
         <button class="mobile-close-btn" id="mobileCloseBtn" onclick="toggleMobileSidebar()" aria-label="Close menu">
           <i data-lucide="x"></i>
@@ -191,38 +293,38 @@
       </div>
 
       <nav class="nav-menu">
-        <button class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <button class="nav-item active" data-tab="dashboard" data-neon-color="cyan" onclick="switchTab('dashboard')">
           <i data-lucide="layout-dashboard"></i>
-          <span>Dashboard</span>
+          <span data-i18n="navDashboard">Dashboard</span>
         </button>
-        <button class="nav-item" data-tab="medications" onclick="switchTab('medications')">
+        <button class="nav-item" data-tab="medications" data-neon-color="blue" onclick="switchTab('medications')">
           <i data-lucide="pill"></i>
-          <span>Medications</span>
+          <span data-i18n="navMedications">Medications</span>
         </button>
-        <button class="nav-item" data-tab="schedule" onclick="switchTab('schedule')">
+        <button class="nav-item" data-tab="schedule" data-neon-color="purple" onclick="switchTab('schedule')">
           <i data-lucide="calendar"></i>
-          <span>Schedule</span>
+          <span data-i18n="navSchedule">Schedule</span>
         </button>
-        <button class="nav-item" data-tab="history" onclick="switchTab('history')">
+        <button class="nav-item" data-tab="history" data-neon-color="pink" onclick="switchTab('history')">
           <i data-lucide="history"></i>
-          <span>History</span>
+          <span data-i18n="navHistory">History</span>
         </button>
-        <button class="nav-item" data-tab="analytics" onclick="switchTab('analytics')">
+        <button class="nav-item" data-tab="analytics" data-neon-color="lime" onclick="switchTab('analytics')">
           <i data-lucide="bar-chart-3"></i>
-          <span>Analytics</span>
+          <span data-i18n="navAnalytics">Analytics</span>
         </button>
-        <button class="nav-item" data-tab="ai-assistant" onclick="switchTab('ai-assistant')">
+        <button class="nav-item" data-tab="ai-assistant" data-neon-color="violet" onclick="switchTab('ai-assistant')">
           <i data-lucide="bot"></i>
-          <span>AI Assistant</span>
+          <span data-i18n="navAiAssistant">AI Assistant</span>
           <span class="badge badge-pulse">AI</span>
         </button>
-        <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
+        <button class="nav-item" data-tab="profile" data-neon-color="skyblue" onclick="switchTab('profile')">
           <i data-lucide="user"></i>
-          <span>Profile</span>
+          <span data-i18n="navProfile">Profile</span>
         </button>
-        <button class="nav-item" data-tab="settings" onclick="switchTab('settings')">
+        <button class="nav-item" data-tab="settings" data-neon-color="amber" onclick="switchTab('settings')">
           <i data-lucide="settings"></i>
-          <span>Settings</span>
+          <span data-i18n="navSettings">Settings</span>
         </button>
       </nav>
 
@@ -279,13 +381,13 @@
               </div>
               <div class="dropdown-divider"></div>
               <button class="dropdown-item" onclick="switchTab('profile'); closeProfileDropdown();">
-                <i data-lucide="user"></i> View Profile
+                <i data-lucide="user"></i> <span data-i18n="navProfile">View Profile</span>
               </button>
               <button class="dropdown-item" onclick="openEditProfileModal();">
                 <i data-lucide="user-cog"></i> Edit Profile
               </button>
               <button class="dropdown-item" onclick="switchTab('settings'); closeProfileDropdown();">
-                <i data-lucide="settings"></i> Settings
+                <i data-lucide="settings"></i> <span data-i18n="navSettings">Settings</span>
               </button>
               <div class="dropdown-divider"></div>
               <button class="dropdown-item danger-item" onclick="handleLogout()">
@@ -296,7 +398,7 @@
 
           <button class="primary-btn add-med-header-btn" onclick="openModal('addModal')">
             <i data-lucide="plus"></i>
-            <span>Add Medication</span>
+            <span data-i18n="addMedication">Add Medication</span>
           </button>
         </div>
       </header>
@@ -313,7 +415,7 @@
                 <i data-lucide="calendar-check"></i>
               </div>
               <div class="card-details">
-                <span class="card-label">Today's Doses</span>
+                <span class="card-label" data-i18n="statTodayDoses">Today's Doses</span>
                 <h3 id="statTodayDoses" class="card-value">0</h3>
               </div>
             </div>
@@ -323,7 +425,7 @@
                 <i data-lucide="check-circle-2"></i>
               </div>
               <div class="card-details">
-                <span class="card-label">Taken</span>
+                <span class="card-label" data-i18n="statTaken">Taken</span>
                 <h3 id="statTakenDoses" class="card-value">0</h3>
               </div>
             </div>
@@ -333,7 +435,7 @@
                 <i data-lucide="clock"></i>
               </div>
               <div class="card-details">
-                <span class="card-label">Pending</span>
+                <span class="card-label" data-i18n="statPending">Pending</span>
                 <h3 id="statPendingDoses" class="card-value">0</h3>
               </div>
             </div>
@@ -343,7 +445,7 @@
                 <i data-lucide="activity"></i>
               </div>
               <div class="card-details">
-                <span class="card-label">Adherence Rate</span>
+                <span class="card-label" data-i18n="statAdherenceRate">Adherence Rate</span>
                 <h3 id="statAdherenceRate" class="card-value">0%</h3>
               </div>
             </div>
@@ -353,7 +455,7 @@
                 <i data-lucide="alert-triangle"></i>
               </div>
               <div class="card-details">
-                <span class="card-label">Low Stock</span>
+                <span class="card-label" data-i18n="statLowStock">Low Stock</span>
                 <h3 id="statLowStock" class="card-value">0</h3>
               </div>
             </div>
@@ -363,20 +465,20 @@
           <div class="toolbar-section">
             <div class="search-box">
               <i data-lucide="search" class="search-icon"></i>
-              <input type="text" id="dashboardSearch" placeholder="Search by name, dosage, or category..." oninput="handleSearchFilter()">
+              <input type="text" id="dashboardSearch" placeholder="Search by name, dosage, or category..." data-i18n-placeholder="searchPlaceholder" oninput="handleSearchFilter()">
             </div>
             <div class="filter-pills">
-              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
-              <button class="filter-pill" data-filter="pending" onclick="setFilter('pending')">Pending</button>
-              <button class="filter-pill" data-filter="taken" onclick="setFilter('taken')">Taken</button>
-              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')">Low Stock</button>
+              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')" data-i18n="filterAll">All</button>
+              <button class="filter-pill" data-filter="pending" onclick="setFilter('pending')" data-i18n="filterPending">Pending</button>
+              <button class="filter-pill" data-filter="taken" onclick="setFilter('taken')" data-i18n="filterTaken">Taken</button>
+              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')" data-i18n="filterLowStock">Low Stock</button>
             </div>
           </div>
 
           <!-- Today's Medication Schedule Section -->
           <div class="section-card">
             <div class="section-header">
-              <h2>Today's Medication Schedule</h2>
+              <h2 data-i18n="todaysScheduleTitle">Today's Medication Schedule</h2>
               <span class="badge badge-info" id="scheduleCountBadge">0 Scheduled</span>
             </div>
 
@@ -390,23 +492,23 @@
         <section id="medications-tab" class="tab-content">
           <div class="tab-header-flex">
             <div>
-              <h2>Medication Cabinet</h2>
-              <p class="text-secondary">Manage your active medications, dosages, and stock levels.</p>
+              <h2 data-i18n="medicationCabinetTitle">Medication Cabinet</h2>
+              <p class="text-secondary" data-i18n="medicationCabinetDesc">Manage your active medications, dosages, and stock levels.</p>
             </div>
             <button class="primary-btn" onclick="openModal('addModal')">
               <i data-lucide="plus"></i>
-              <span>Add New Medicine</span>
+              <span data-i18n="addNewMedicine">Add New Medicine</span>
             </button>
           </div>
 
           <div class="toolbar-section margin-top-md">
             <div class="search-box">
               <i data-lucide="search" class="search-icon"></i>
-              <input type="text" id="medsSearch" placeholder="Search medications..." oninput="handleSearchFilter()">
+              <input type="text" id="medsSearch" placeholder="Search medications..." data-i18n-placeholder="searchPlaceholder" oninput="handleSearchFilter()">
             </div>
             <div class="filter-pills">
-              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
-              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')">Low Stock (<10)</button>
+              <button class="filter-pill active" data-filter="all" onclick="setFilter('all')" data-i18n="filterAll">All</button>
+              <button class="filter-pill" data-filter="low-stock" onclick="setFilter('low-stock')" data-i18n="filterLowStock">Low Stock (<10)</button>
             </div>
           </div>
 
@@ -418,8 +520,8 @@
         <!-- SCHEDULE TAB -->
         <section id="schedule-tab" class="tab-content">
           <div class="tab-header">
-            <h2>Detailed Schedule</h2>
-            <p class="text-secondary">Comprehensive timeline of your medications grouped by time of day.</p>
+            <h2 data-i18n="detailedScheduleTitle">Detailed Schedule</h2>
+            <p class="text-secondary" data-i18n="detailedScheduleDesc">Comprehensive timeline of your medications grouped by time of day.</p>
           </div>
 
           <div id="timelineContainer" class="timeline-container margin-top-md">
@@ -431,13 +533,26 @@
         <section id="history-tab" class="tab-content">
           <div class="tab-header-flex">
             <div>
-              <h2>Medication History Log</h2>
-              <p class="text-secondary">Historical record of taken, pending, and missed dose timestamps.</p>
+              <h2 data-i18n="historyLogTitle">Medication History Log</h2>
+              <p class="text-secondary" data-i18n="historyLogDesc">Historical record of taken, pending, and missed dose timestamps.</p>
             </div>
             <button class="secondary-btn" onclick="clearHistoryLog()">
               <i data-lucide="trash-2"></i>
-              <span>Clear History</span>
+              <span data-i18n="clearHistory">Clear History</span>
             </button>
+          </div>
+
+          <div class="toolbar-section margin-top-md">
+            <div class="search-box">
+              <i data-lucide="search" class="search-icon"></i>
+              <input type="text" id="historySearch" placeholder="Search history by medicine, dosage, quantity, or date..." data-i18n-placeholder="searchPlaceholder" oninput="handleHistorySearchFilter()">
+            </div>
+            <div class="filter-pills">
+              <button class="filter-pill active" data-history-filter="all" onclick="setHistoryFilter('all')" data-i18n="filterAll">All</button>
+              <button class="filter-pill" data-history-filter="taken" onclick="setHistoryFilter('taken')" data-i18n="filterTaken">✓ Taken</button>
+              <button class="filter-pill" data-history-filter="missed" onclick="setHistoryFilter('missed')">⚠ Missed</button>
+              <button class="filter-pill" data-history-filter="pending" onclick="setHistoryFilter('pending')" data-i18n="filterPending">⏳ Pending</button>
+            </div>
           </div>
 
           <div class="section-card margin-top-md">
@@ -450,8 +565,8 @@
         <!-- ANALYTICS TAB -->
         <section id="analytics-tab" class="tab-content">
           <div class="tab-header">
-            <h2>Adherence & Health Analytics</h2>
-            <p class="text-secondary">Track your medication compliance and weekly compliance trends.</p>
+            <h2 data-i18n="analyticsTitle">Adherence & Health Analytics</h2>
+            <p class="text-secondary" data-i18n="analyticsDesc">Track your medication compliance and weekly compliance trends.</p>
           </div>
 
           <!-- Analytics Overview Cards -->
@@ -522,8 +637,8 @@
                   <i data-lucide="bot"></i>
                 </div>
                 <div>
-                  <h2>MediMate Health Assistant</h2>
-                  <p class="text-secondary">Ask questions about your medicines, stock, or schedule.</p>
+                  <h2 data-i18n="aiAssistantTitle">MediMate Health Assistant</h2>
+                  <p class="text-secondary" data-i18n="aiAssistantDesc">Ask questions about your medicines, stock, or schedule.</p>
                 </div>
               </div>
               <button class="secondary-btn" onclick="clearChatHistory()">
@@ -534,7 +649,7 @@
 
             <div class="ai-safety-alert">
               <i data-lucide="shield-alert" class="alert-icon"></i>
-              <span><strong>Health Safety Disclaimer:</strong> This AI assistant provides general information only. It is not a doctor. Consult your healthcare professional before modifying medication dosage.</span>
+              <span data-i18n="aiSafetyDisclaimer"><strong>Health Safety Disclaimer:</strong> This AI assistant provides general information only. It is not a doctor. Consult your healthcare professional before modifying medication dosage.</span>
             </div>
 
             <!-- Quick Suggestion Chips -->
@@ -584,7 +699,7 @@
         <section id="profile-tab" class="tab-content">
           <div class="tab-header-flex">
             <div>
-              <h2>Patient Profile</h2>
+              <h2 data-i18n="navProfile">Patient Profile</h2>
               <p class="text-secondary">Your account, profile information, and credentials.</p>
             </div>
             <button class="primary-btn" onclick="openEditProfileModal()">
@@ -641,17 +756,99 @@
         <!-- SETTINGS TAB -->
         <section id="settings-tab" class="tab-content">
           <div class="tab-header">
-            <h2>Application Settings</h2>
-            <p class="text-secondary">Customize notifications, voice reminders, sound preferences, and data.</p>
+            <h2 data-i18n="settingsTitle">Application Settings</h2>
+            <p class="text-secondary" data-i18n="settingsDesc">Customize notifications, voice reminders, sound preferences, language, and data.</p>
           </div>
 
           <div class="settings-grid margin-top-md">
-            <!-- Reminder & Alarm Settings -->
+            
+            <!-- Language & Regional Preferences -->
+            <div class="section-card">
+              <div class="card-header-with-icon">
+                <i data-lucide="languages"></i>
+                <h3 data-i18n="languagePreference">Language Selection (Text + Voice)</h3>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title" data-i18n="languagePreference">App & Voice Language</span>
+                  <p class="setting-desc" data-i18n="languageDesc">Select your preferred language for text UI and voice reminders.</p>
+                </div>
+                <select id="settingLanguage" class="custom-select" onchange="saveSettings()">
+                  <option value="en">English (US)</option>
+                  <option value="ta">தமிழ் (Tamil)</option>
+                  <option value="hi">हिंदी (Hindi)</option>
+                </select>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title" data-i18n="timeFormatPreference">Time Format Display</span>
+                  <p class="setting-desc" data-i18n="timeFormatDesc">Switch between 12-hour (AM/PM) and 24-hour time representation.</p>
+                </div>
+                <select id="settingTimeFormat" class="custom-select" onchange="saveSettings()">
+                  <option value="12h">12-Hour (08:00 PM)</option>
+                  <option value="24h">24-Hour (20:00)</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Custom Alarm Ringtone & Sound Preferences -->
+            <div class="section-card">
+              <div class="card-header-with-icon">
+                <i data-lucide="music"></i>
+                <h3 data-i18n="customRingtoneTitle">Custom Alarm Ringtone</h3>
+              </div>
+
+              <div class="setting-item flex-column-mobile">
+                <div>
+                  <span class="setting-title" data-i18n="customRingtoneTitle">User-Uploaded Alarm Tone</span>
+                  <p class="setting-desc" data-i18n="customRingtoneDesc">Upload your own MP3, WAV, or M4A audio file for medication alarms.</p>
+                  <div class="margin-top-xs" id="customRingtonePillContainer">
+                    <span id="customRingtonePill" class="badge badge-info" style="display: none; font-size: 0.85rem; padding: 0.4rem 0.75rem;">
+                      <i data-lucide="music" style="width: 14px; margin-right: 4px;"></i> <span id="customRingtoneNameDisplay">Custom Tone</span>
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="ringtone-actions-row">
+                  <input type="file" id="customRingtoneInput" accept="audio/mp3,audio/mpeg,audio/wav,audio/x-wav,audio/m4a,audio/x-m4a,audio/aac,audio/*" style="display: none;" onchange="handleCustomRingtoneUpload(event)">
+                  <label for="customRingtoneInput" class="secondary-btn cursor-pointer">
+                    <i data-lucide="upload"></i> <span data-i18n="uploadAudioFile">Upload Tone</span>
+                  </label>
+                  <button type="button" class="icon-btn" id="previewCustomToneBtn" title="Play Preview" onclick="playCustomRingtonePreview()">
+                    <i data-lucide="play"></i>
+                  </button>
+                  <button type="button" class="icon-btn danger" id="stopCustomToneBtn" title="Stop Preview" onclick="stopCustomRingtonePreview()">
+                    <i data-lucide="square"></i>
+                  </button>
+                  <button type="button" class="text-link-btn danger-link" id="resetCustomToneBtn" style="display: none;" onclick="removeCustomRingtone()" data-i18n="resetDefaultTone">
+                    Reset Default
+                  </button>
+                </div>
+              </div>
+
+              <div class="setting-item">
+                <div>
+                  <span class="setting-title" data-i18n="alarmStyleTitle">Default Alarm Style</span>
+                  <p class="setting-desc" data-i18n="alarmStyleDesc">Choose alarm sound, vibration, and repetition behavior for reminders.</p>
+                </div>
+                <select id="settingDefaultAlarmStyle" class="custom-select" onchange="saveSettings()">
+                  <option value="gentle" data-i18n="alarmStyleGentle">Gentle (Soft volume ramp up)</option>
+                  <option value="standard" selected data-i18n="alarmStyleStandard">Standard (Default volume chime)</option>
+                  <option value="urgent" data-i18n="alarmStyleUrgent">Urgent / Persistent (Loud, looping sound & vibration)</option>
+                  <option value="silent_vibe" data-i18n="alarmStyleSilentVibe">Silent + Vibration Only</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Reminder & Alarm Preferences -->
             <div class="section-card">
               <div class="card-header-with-icon">
                 <i data-lucide="bell"></i>
                 <h3>Reminder & Alarm Preferences</h3>
               </div>
+
               <div class="setting-item">
                 <div>
                   <span class="setting-title">Enable Medication Reminders</span>
@@ -677,7 +874,7 @@
               <div class="setting-item">
                 <div>
                   <span class="setting-title">Alarm Sound</span>
-                  <p class="setting-desc">Play pleasant audio chime during alerts.</p>
+                  <p class="setting-desc">Play pleasant audio chime or custom tone during alerts.</p>
                 </div>
                 <label class="switch">
                   <input type="checkbox" id="settingAlarmSound" checked onchange="saveSettings()">
@@ -709,7 +906,7 @@
             <div class="section-card">
               <div class="card-header-with-icon">
                 <i data-lucide="palette"></i>
-                <h3>Appearance & Theme</h3>
+                <h3>Appearance & System</h3>
               </div>
               <div class="setting-item">
                 <div>
@@ -748,6 +945,7 @@
                 </button>
               </div>
             </div>
+
           </div>
         </section>
 
@@ -759,7 +957,7 @@
   <div id="addModal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Add New Medication</h3>
+        <h3 data-i18n="addNewMedicine">Add New Medication</h3>
         <button class="close-icon-btn" onclick="closeModal('addModal')"><i data-lucide="x"></i></button>
       </div>
       <form id="addMedForm" onsubmit="saveNewMedication(event)">
@@ -773,8 +971,14 @@
             <input type="text" id="addMedDosage" placeholder="e.g. 10 mg (1 tablet), 500 mg" required>
           </div>
           <div class="form-group">
-            <label for="addMedTime">Scheduled Time *</label>
-            <input type="time" id="addMedTime" required>
+            <label for="addMedTime">Scheduled Time * <small class="text-secondary">(AM / PM)</small></label>
+            <div class="time-ampm-wrapper">
+              <input type="time" id="addMedTime" class="time-input-field" required oninput="syncAmPmFromTime('add')" onchange="syncAmPmFromTime('add')">
+              <select id="addMedAmPm" class="custom-select ampm-select" aria-label="Select AM or PM" onchange="syncTimeFromAmPm('add')">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -794,12 +998,21 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="addMedAlarmStyle" data-i18n="alarmStyleTitle">Alarm Style / Urgency</label>
+          <select id="addMedAlarmStyle" class="custom-select">
+            <option value="gentle" data-i18n="alarmStyleGentle">Gentle (Soft volume ramp up)</option>
+            <option value="standard" selected data-i18n="alarmStyleStandard">Standard (Default volume chime)</option>
+            <option value="urgent" data-i18n="alarmStyleUrgent">Urgent / Persistent (Loud, looping sound & vibration)</option>
+            <option value="silent_vibe" data-i18n="alarmStyleSilentVibe">Silent + Vibration Only</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="addMedNotes">Optional Notes</label>
           <textarea id="addMedNotes" rows="2" placeholder="e.g. Take with food in the morning..."></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="secondary-btn" onclick="closeModal('addModal')">Cancel</button>
-          <button type="submit" class="primary-btn">Add Medication</button>
+          <button type="button" class="secondary-btn" onclick="closeModal('addModal')" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary-btn" data-i18n="addMedication">Add Medication</button>
         </div>
       </form>
     </div>
@@ -809,7 +1022,7 @@
   <div id="editModal" class="modal-overlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3>Edit Medication</h3>
+        <h3 data-i18n="editMedication">Edit Medication</h3>
         <button class="close-icon-btn" onclick="closeModal('editModal')"><i data-lucide="x"></i></button>
       </div>
       <form id="editMedForm" onsubmit="saveEditedMedication(event)">
@@ -824,8 +1037,14 @@
             <input type="text" id="editMedDosage" required>
           </div>
           <div class="form-group">
-            <label for="editMedTime">Scheduled Time *</label>
-            <input type="time" id="editMedTime" required>
+            <label for="editMedTime">Scheduled Time * <small class="text-secondary">(AM / PM)</small></label>
+            <div class="time-ampm-wrapper">
+              <input type="time" id="editMedTime" class="time-input-field" required oninput="syncAmPmFromTime('edit')" onchange="syncAmPmFromTime('edit')">
+              <select id="editMedAmPm" class="custom-select ampm-select" aria-label="Select AM or PM" onchange="syncTimeFromAmPm('edit')">
+                <option value="AM">AM</option>
+                <option value="PM">PM</option>
+              </select>
+            </div>
           </div>
         </div>
         <div class="form-row">
@@ -845,12 +1064,21 @@
           </div>
         </div>
         <div class="form-group">
+          <label for="editMedAlarmStyle" data-i18n="alarmStyleTitle">Alarm Style / Urgency</label>
+          <select id="editMedAlarmStyle" class="custom-select">
+            <option value="gentle" data-i18n="alarmStyleGentle">Gentle (Soft volume ramp up)</option>
+            <option value="standard" selected data-i18n="alarmStyleStandard">Standard (Default volume chime)</option>
+            <option value="urgent" data-i18n="alarmStyleUrgent">Urgent / Persistent (Loud, looping sound & vibration)</option>
+            <option value="silent_vibe" data-i18n="alarmStyleSilentVibe">Silent + Vibration Only</option>
+          </select>
+        </div>
+        <div class="form-group">
           <label for="editMedNotes">Optional Notes</label>
           <textarea id="editMedNotes" rows="2"></textarea>
         </div>
         <div class="modal-footer">
-          <button type="button" class="secondary-btn" onclick="closeModal('editModal')">Cancel</button>
-          <button type="submit" class="primary-btn">Save Changes</button>
+          <button type="button" class="secondary-btn" onclick="closeModal('editModal')" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary-btn" data-i18n="saveChanges">Save Changes</button>
         </div>
       </form>
     </div>
@@ -894,8 +1122,8 @@
           <input type="tel" id="editProfilePhone">
         </div>
         <div class="modal-footer">
-          <button type="button" class="secondary-btn" onclick="closeModal('editProfileModal')">Cancel</button>
-          <button type="submit" class="primary-btn" id="saveProfileBtn">Save Profile</button>
+          <button type="button" class="secondary-btn" onclick="closeModal('editProfileModal')" data-i18n="cancel">Cancel</button>
+          <button type="submit" class="primary-btn" id="saveProfileBtn" data-i18n="saveChanges">Save Profile</button>
         </div>
       </form>
     </div>
@@ -908,19 +1136,19 @@
         <i data-lucide="bell" class="alarm-bell-icon"></i>
       </div>
       <div class="alarm-content text-center">
-        <span class="badge badge-warning">Medication Reminder</span>
+        <span class="badge badge-warning" id="alarmStyleBadge">Medication Reminder</span>
         <h2 id="alarmMedName" class="margin-top-xs">Metformin XR</h2>
         <p id="alarmMedDosage" class="alarm-dosage">500 mg (1 tablet)</p>
         <p id="alarmMedTime" class="alarm-time"><i data-lucide="clock"></i> Scheduled for 20:00</p>
       </div>
       <div class="modal-footer alarm-footer">
         <button class="primary-btn glow-green-btn" id="alarmTakeBtn" onclick="handleAlarmTaken()">
-          <i data-lucide="check"></i> Mark Taken
+          <i data-lucide="check"></i> <span data-i18n="markTaken">Mark Taken</span>
         </button>
         <button class="secondary-btn" onclick="handleAlarmSnooze()">
-          <i data-lucide="clock-3"></i> Remind Me Later
+          <i data-lucide="clock-3"></i> <span data-i18n="remindMeLater">Remind Me Later</span>
         </button>
-        <button class="text-link-btn" onclick="dismissAlarm()">Dismiss</button>
+        <button class="text-link-btn" onclick="dismissAlarm()" data-i18n="dismiss">Dismiss</button>
       </div>
     </div>
   </div>
@@ -931,25 +1159,56 @@
       <div class="confirm-icon danger-icon">
         <i data-lucide="trash-2"></i>
       </div>
-      <h3>Remove Medication?</h3>
+      <h3 data-i18n="deleteMedication">Remove Medication?</h3>
       <p class="text-secondary margin-top-xs">Are you sure you want to remove this medication? This action cannot be undone.</p>
       <input type="hidden" id="deleteTargetId">
       <div class="modal-footer margin-top-md">
-        <button class="secondary-btn" onclick="closeModal('deleteModal')">Cancel</button>
-        <button class="danger-btn" onclick="confirmDeleteMedication()">Remove</button>
+        <button class="secondary-btn" onclick="closeModal('deleteModal')" data-i18n="cancel">Cancel</button>
+        <button class="danger-btn" onclick="confirmDeleteMedication()" data-i18n="deleteMedication">Remove</button>
       </div>
     </div>
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
-  <div id="toastContainer" class="toast-container"></div>
+  <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR -->
+  <nav class="mobile-bottom-nav" aria-label="Mobile Navigation">
+    <button class="mobile-nav-item active" data-tab="dashboard" data-neon-color="cyan" onclick="switchTab('dashboard')" aria-label="Dashboard">
+      <i data-lucide="layout-dashboard"></i>
+      <span data-i18n="navDashboard">Dashboard</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="medications" data-neon-color="blue" onclick="switchTab('medications')" aria-label="Medications">
+      <i data-lucide="pill"></i>
+      <span data-i18n="navMedications">Meds</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="schedule" data-neon-color="purple" onclick="switchTab('schedule')" aria-label="Schedule">
+      <i data-lucide="calendar"></i>
+      <span data-i18n="navSchedule">Schedule</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="analytics" data-neon-color="lime" onclick="switchTab('analytics')" aria-label="Analytics">
+      <i data-lucide="bar-chart-3"></i>
+      <span data-i18n="navAnalytics">Analytics</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="ai-assistant" data-neon-color="violet" onclick="switchTab('ai-assistant')" aria-label="AI Health Assistant">
+      <i data-lucide="bot"></i>
+      <span data-i18n="navAiAssistant">AI Help</span>
+    </button>
+    <button class="mobile-nav-item" data-tab="profile" data-neon-color="skyblue" onclick="switchTab('profile')" aria-label="User Profile">
+      <i data-lucide="user"></i>
+      <span data-i18n="navProfile">Profile</span>
+    </button>
+  </nav>
 
   <!-- JavaScript Modules -->
+  <script src="js/i18n.js"></script>
+  <script src="js/splash.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/reminders.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/ai-assistant.js"></script>
   <script src="js/auth.js"></script>
+  <script src="js/sparkles.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
