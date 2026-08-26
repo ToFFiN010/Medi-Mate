@@ -2355,6 +2355,139 @@ input:checked + .slider:before { transform: translateX(22px); }
   box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
 }
 
+/* ==========================================================================
+   Medication Schedule Items & Remove Actions
+   ========================================================================== */
+.med-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: var(--bg-card);
+  backdrop-filter: var(--backdrop-blur);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--primary-teal);
+  border-radius: var(--radius-md);
+  margin-bottom: 0.75rem;
+  transition: var(--transition-fast);
+}
+
+.med-item-row:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-highlight);
+  transform: translateY(-1px);
+}
+
+.med-item-row.taken-status {
+  opacity: 0.8;
+  background: rgba(16, 185, 129, 0.05);
+  border-left-color: var(--accent-green) !important;
+}
+
+.med-left-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.med-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.take-action-btn {
+  background: rgba(13, 148, 136, 0.15);
+  color: var(--primary-teal-hover);
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  padding: 0.45rem 0.9rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: var(--transition-fast);
+}
+
+.take-action-btn:hover {
+  background: var(--primary-teal);
+  color: #ffffff;
+  border-color: var(--primary-teal);
+}
+
+.btn-icon-action {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.btn-icon-action:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main);
+  border-color: var(--border-highlight);
+}
+
+.btn-icon-action.danger {
+  color: var(--accent-rose);
+  background: rgba(244, 63, 94, 0.1);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+.btn-icon-action.danger:hover {
+  background: rgba(244, 63, 94, 0.25);
+  color: #ffffff;
+  border-color: var(--accent-rose);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+.remove-action-btn {
+  background: rgba(244, 63, 94, 0.1);
+  color: var(--accent-rose);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  padding: 0.45rem 0.8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: var(--transition-fast);
+}
+
+.remove-action-btn:hover {
+  background: var(--accent-rose);
+  color: #ffffff;
+  border-color: var(--accent-rose);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+}
+
+@media (max-width: 640px) {
+  .med-item-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .med-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+
 
 
 

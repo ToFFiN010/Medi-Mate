@@ -626,6 +626,9 @@ function renderDashboard() {
               ? `<span class="status-badge badge-taken"><i data-lucide="check"></i> ✓ Taken</span>`
               : `<button class="take-action-btn" onclick="markTaken('${med.id}')"><i data-lucide="check"></i> <span data-i18n="markTaken">Mark Taken</span></button>`
           }
+          <button class="remove-action-btn" title="Remove from Schedule" onclick="deleteMed('${med.id}')">
+            <i data-lucide="trash-2"></i> <span data-i18n="deleteMedication">Remove</span>
+          </button>
         </div>
       </div>
     `;
@@ -800,6 +803,7 @@ function renderScheduleTimeline() {
     ${renderTimelineGroup('Night & Bedtime (9:00 PM - 5:00 AM)', night, 'moon')}
   `;
 
+  if (window.applyTranslations) window.applyTranslations();
   initLucideIcons();
 }
 
@@ -825,8 +829,11 @@ function renderTimelineGroup(title, groupMeds, icon) {
                         <span class="text-secondary" style="font-size: 0.85rem; display: block;">Scheduled: ${escapeHtml(displayTime)} ${getAlarmStyleBadge(med.alarmStyle)}</span>
                       </div>
                     </div>
-                    <div>
-                      ${isTaken ? '<span class="status-badge badge-taken"><i data-lucide="check"></i> ✓ Taken</span>' : `<button class="take-action-btn" onclick="markTaken('${med.id}')"><i data-lucide="check"></i> Mark Taken</button>`}
+                    <div class="med-actions">
+                      ${isTaken ? '<span class="status-badge badge-taken"><i data-lucide="check"></i> ✓ Taken</span>' : `<button class="take-action-btn" onclick="markTaken('${med.id}')"><i data-lucide="check"></i> <span data-i18n="markTaken">Mark Taken</span></button>`}
+                      <button class="remove-action-btn" title="Remove from Schedule" onclick="deleteMed('${med.id}')">
+                        <i data-lucide="trash-2"></i> <span data-i18n="deleteMedication">Remove</span>
+                      </button>
                     </div>
                   </div>
                 `;
