@@ -359,10 +359,59 @@
         </div>
 
         <div class="header-actions">
-          <button class="icon-btn notification-btn" id="notificationBtn" title="Notifications" onclick="switchTab('dashboard')">
-            <i data-lucide="bell"></i>
-            <span class="notification-dot" id="notificationDot"></span>
-          </button>
+          <!-- HEADER NOTIFICATION DROPDOWN CONTAINER -->
+          <div class="notification-dropdown-container" id="notificationDropdownContainer">
+            <button class="icon-btn notification-btn" id="notificationBtn" title="Notifications" onclick="toggleNotificationDropdown(event)">
+              <i data-lucide="bell"></i>
+              <span class="notification-badge" id="notificationBadge" style="display: none;">3</span>
+            </button>
+
+            <!-- FLOATING NOTIFICATION DROPDOWN PANEL -->
+            <div id="notificationDropdownPanel" class="notification-dropdown-panel">
+              <div class="notification-panel-header">
+                <div class="panel-header-title-group">
+                  <i data-lucide="bell" class="panel-bell-icon"></i>
+                  <h3>Notifications</h3>
+                  <span class="unread-header-count" id="notificationHeaderUnreadBadge">3 New</span>
+                </div>
+                <div class="panel-header-actions">
+                  <button class="panel-icon-btn" title="Notification Settings" onclick="openNotificationSettingsModal(event)">
+                    <i data-lucide="settings"></i>
+                  </button>
+                  <button class="panel-icon-btn" title="Close" onclick="closeNotificationDropdown()">
+                    <i data-lucide="x"></i>
+                  </button>
+                </div>
+              </div>
+
+              <div class="notification-section-label">TODAY</div>
+
+              <div class="notification-dropdown-list" id="notificationDropdownList">
+                <!-- Dynamically populated notification cards -->
+              </div>
+
+              <!-- MEDICATION PROGRESS SUMMARY -->
+              <div class="notification-progress-summary" id="notificationProgressSummary">
+                <div class="summary-header-row">
+                  <span class="summary-check-icon">✓</span>
+                  <span class="summary-title">Today's adherence:</span>
+                  <span class="summary-percentage" id="summaryAdherencePct">68%</span>
+                </div>
+                <div class="summary-progress-bar-container">
+                  <div class="summary-progress-bar-fill" id="summaryProgressBarFill" style="width: 68%;"></div>
+                </div>
+                <div class="summary-subtext" id="summaryDosesCount">15 of 22 doses completed</div>
+              </div>
+
+              <!-- VIEW ALL NOTIFICATIONS -->
+              <div class="notification-panel-footer">
+                <button class="view-all-notifications-btn" onclick="openAllNotificationsModal()">
+                  <span>View All Notifications</span>
+                  <i data-lucide="chevron-right"></i>
+                </button>
+              </div>
+            </div>
+          </div>
           <button class="icon-btn settings-header-btn" title="Settings" onclick="switchTab('settings')">
             <i data-lucide="sliders"></i>
           </button>
@@ -1172,6 +1221,142 @@
     </div>
   </div>
 
+  <!-- DEDICATED ALL NOTIFICATIONS MODAL -->
+  <div id="allNotificationsModal" class="modal-overlay">
+    <div class="modal-card modal-card-lg">
+      <div class="modal-header">
+        <div class="modal-header-title-group">
+          <i data-lucide="bell" class="modal-header-icon"></i>
+          <h3>Notifications Center</h3>
+        </div>
+        <button class="close-icon-btn" onclick="closeModal('allNotificationsModal')"><i data-lucide="x"></i></button>
+      </div>
+
+      <div class="modal-filter-toolbar">
+        <div class="filter-pills-row">
+          <button class="filter-pill active" onclick="filterAllNotifications('all', this)">All</button>
+          <button class="filter-pill" onclick="filterAllNotifications('unread', this)">Unread</button>
+          <button class="filter-pill" onclick="filterAllNotifications('reminders', this)">Reminders</button>
+          <button class="filter-pill" onclick="filterAllNotifications('low_stock', this)">Low Stock</button>
+          <button class="filter-pill" onclick="filterAllNotifications('upcoming', this)">Upcoming</button>
+          <button class="filter-pill" onclick="filterAllNotifications('missed', this)">Missed</button>
+        </div>
+        <div class="notif-bulk-actions">
+          <button class="text-link-btn" onclick="markAllNotificationsAsRead()">Mark All as Read</button>
+          <button class="text-link-btn danger-link" onclick="clearReadNotifications()">Clear Read</button>
+        </div>
+      </div>
+
+      <div class="all-notifications-list-container" id="allNotificationsListContainer">
+        <!-- List of all notifications rendered dynamically -->
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="secondary-btn" onclick="closeModal('allNotificationsModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEDICATED NOTIFICATION SETTINGS MODAL -->
+  <div id="notificationSettingsModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-header-title-group">
+          <i data-lucide="settings" class="modal-header-icon"></i>
+          <h3>Notification Preferences</h3>
+        </div>
+        <button class="close-icon-btn" onclick="closeModal('notificationSettingsModal')"><i data-lucide="x"></i></button>
+      </div>
+
+      <form id="notificationSettingsForm" onsubmit="saveNotificationSettingsForm(event)">
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Medication Reminders</span>
+            <p class="setting-desc">Receive pop-up reminders at scheduled dose times.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifReminders" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Upcoming-Dose Alerts</span>
+            <p class="setting-desc">Alert for doses scheduled in the next 60 minutes.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifUpcoming" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Low-Stock Alerts</span>
+            <p class="setting-desc">Warn when medication inventory drops below 10 doses.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifLowStock" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Refill Reminders</span>
+            <p class="setting-desc">Send automated prompts to request medication refills.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifRefills" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Browser Notifications</span>
+            <p class="setting-desc">Send OS push notifications when app is minimized.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifBrowser">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Sound Effects & Ringtone</span>
+            <p class="setting-desc">Play audio chimes during alerts and reminders.</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="settingNotifSound" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <div>
+            <span class="setting-title">Snooze Duration</span>
+            <p class="setting-desc">Postpone time when "Snooze" is clicked.</p>
+          </div>
+          <select id="settingNotifSnooze" class="custom-select">
+            <option value="5">5 Minutes</option>
+            <option value="10" selected>10 Minutes</option>
+            <option value="15">15 Minutes</option>
+            <option value="30">30 Minutes</option>
+            <option value="60">60 Minutes</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="secondary-btn" onclick="closeModal('notificationSettingsModal')">Cancel</button>
+          <button type="submit" class="primary-btn">Save Preferences</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION CONTAINER -->
   <div id="toastContainer" class="toast-container" aria-live="polite" aria-atomic="true"></div>
 
@@ -1208,6 +1393,7 @@
   <script src="js/splash.js"></script>
   <script src="js/audio.js"></script>
   <script src="js/reminders.js"></script>
+  <script src="js/notifications.js"></script>
   <script src="js/analytics.js"></script>
   <script src="js/ai-assistant.js"></script>
   <script src="js/auth.js"></script>

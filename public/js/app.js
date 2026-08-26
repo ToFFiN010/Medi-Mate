@@ -27,7 +27,7 @@ const DEFAULT_SEED_MEDICATIONS = [
     name: 'Lisinopril',
     dosage: '10 mg',
     time: '08:00',
-    stock: 27,
+    stock: 7,
     category: 'pill',
     neonColor: 'cyan',
     notes: 'Take in the morning with food.',
@@ -488,6 +488,7 @@ function initLucideIcons() {
  * Single Page Application Tab Router (`switchTab`).
  */
 function switchTab(tabId, updateHash = true) {
+  closeMobileSidebar();
   if (!window.currentUser && window.checkAuthGuard) {
     window.checkAuthGuard();
     return;
@@ -547,6 +548,7 @@ function refreshAllViews() {
   renderAnalytics();
   if (window.renderProfileView) window.renderProfileView();
   if (window.applyTranslations) window.applyTranslations();
+  if (window.updateNotificationsUI) window.updateNotificationsUI();
   initLucideIcons();
 }
 
