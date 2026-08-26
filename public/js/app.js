@@ -1448,12 +1448,18 @@ function resetToDemoData() {
 
 function toggleMobileSidebar() {
   const sidebar = document.getElementById('sidebar');
-  if (sidebar) sidebar.classList.toggle('mobile-open');
+  const overlay = document.getElementById('sidebarOverlay');
+  if (sidebar) {
+    const isOpen = sidebar.classList.toggle('mobile-open');
+    if (overlay) overlay.classList.toggle('active', isOpen);
+  }
 }
 
 function closeMobileSidebar() {
   const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('sidebarOverlay');
   if (sidebar) sidebar.classList.remove('mobile-open');
+  if (overlay) overlay.classList.remove('active');
 }
 
 function escapeHtml(str) {
